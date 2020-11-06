@@ -16,8 +16,8 @@ int nMinos = 4;
 int nNextMinos = 4;
 int numMin = 4;
 int numMax = 11;//Numero siguiente al maximo que deseamos sacar
-int numT = int(random (numMin, numMax));
-int numNextT = int(random (numMin, numMax));
+int numT;
+int numNextT;
 
 
 Tablero tablero;
@@ -102,22 +102,11 @@ void setup() {
   tetrisImagen = loadImage("tetris.png");
   gameOverImagen = loadImage("game_over.png");
   coloresIniciales();
-
-  tablero = new Tablero(225, 125, r, c);
-  nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
-  scoreTab = new Tablero(225, 0, 9, 9, tablero, 4, 1);
+  
+  setUpGame();
+ 
   seleMino = new Tablero(225, 0, 13, 9, tablero, 4, 2);
-  polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
-  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-  finalPolyomino = polyominoMove.clone();
-  finalPolyomino.fillColor = color(0, 0, 0, 1);
-  finalPolyomino.strokeColor = color(#3BE0F2);
-
-  tablero.inicialize(0);
-  nextTablero.inicialize(1);
-  scoreTab.inicialize(1);
   seleMino.inicialize(1);
-  printArray(PFont.list());
   fuente = createFont("Comic Sans MS", 60);
 
   monomino = new Polyomino(polyominoColor[0], 0, arrayPolyominos[0], 2, 1, seleMino);
@@ -132,20 +121,7 @@ void draw() {
   background(0);
 
   if (changeFacts) {
-    numT = int(random (numMin, numMax));
-    numNextT = int(random (numMin, numMax));
-    nMinos = numMino(numT);
-    nNextMinos = numMino(numNextT);
-    tablero = new Tablero(225, 125, r, c);
-    tablero.inicialize(0);
-    nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
-    nextTablero.inicialize(1);
-    polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
-    nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-    finalPolyomino = polyominoMove.clone();
-    finalPolyomino.fillColor = color(0, 0, 0, 1);
-    finalPolyomino.strokeColor = color(#3BE0F2);
-    //finalPolyomino = new Polyomino(color(0, 0, 0, 1), color(#3BE0F2), polyominoMove);
+    setUpGame();
     changeFacts = !changeFacts;
   }
 
@@ -161,8 +137,6 @@ void draw() {
     gameScreen();
   }
 }
-
-
 
 void keyPressed() {
 
@@ -180,7 +154,6 @@ void keyPressed() {
 void mousePressed() {
   if (screenInicial) {
     if (playButton.check()) {
-      //changeScreen(screenInicial,screenGame);
       screenInicial = !screenInicial;
       screenGame = !screenGame;
     } else if (configurarButton.check()) {
@@ -253,7 +226,6 @@ void tiempo() {
     if (!polyominoMove.colisionDownRotate(0)) {
       polyominoMove.moveDown();
     } else {
-      //println(tablero.filasLlenas);
       polyominoMove.savePolyomino();
       if ((!tablero.gameOver())) {
         continueGame();
@@ -305,12 +277,36 @@ void continueGame() {
   numNextT = int(random (numMin, numMax));
   nMinos = numMino(numT);
   nNextMinos = numMino(numNextT);
+  varNewPol();
+  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+  posFinalPol();
+}
+
+void posFinalPol(){
+  finalPolyomino = polyominoMove.clone();
+  finalPolyomino.fillColor = color(0, 0, 0, 1);
+  finalPolyomino.strokeColor = color(#3BE0F2);
+}
+
+void varNewPol(){
   polyominoMove = nextPolyomino.clone();
   polyominoMove.row = -1;
   polyominoMove.table = tablero;
   polyominoMove.column = ((polyominoMove.table.columns/2) -(polyominoMove.numMono/2));
-  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-  finalPolyomino = polyominoMove.clone();
-  finalPolyomino.fillColor = color(0, 0, 0, 1);
-  finalPolyomino.strokeColor = color(#3BE0F2);
+}
+
+void setUpGame(){
+    numT = int(random (numMin, numMax));
+    numNextT = int(random (numMin, numMax));
+    nMinos = numMino(numT);
+    nNextMinos = numMino(numNextT);
+    tablero = new Tablero(225, 125, r, c);
+    tablero.inicialize(0);
+    scoreTab = new Tablero(225, 0, 9, 9, tablero, 4, 1);
+    scoreTab.inicialize(1);
+    nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
+    nextTablero.inicialize(1);
+    polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
+    nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+    posFinalPol();
 }

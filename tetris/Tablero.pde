@@ -1,4 +1,5 @@
 class Tablero extends Figure {
+  
   int rows;
   int columns;
   int dimCuadro;

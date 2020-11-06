@@ -7,8 +7,6 @@ class Polyomino extends Figure implements Cloneable {
   int pRotation;
   int dimCuadro;
   Tablero table;
-  //int xTable;
-  //int yTable;
   int numMono;
   int numArray;
 
@@ -34,8 +32,8 @@ class Polyomino extends Figure implements Cloneable {
     strokeWeight(3);
     for (int i = 0; i <= numArray; i++) {
       if ((rotations[rotation] & (1 << numArray - i)) != 0) {
-        posX = (i%numMono)*dimCuadro + column*dimCuadro + table.posX;//xTable;
-        posY = ((i/numMono)|0) * dimCuadro + row*dimCuadro + table.posY;//yTable;
+        posX = (i%numMono)*dimCuadro + column*dimCuadro + table.posX;
+        posY = ((i/numMono)|0) * dimCuadro + row*dimCuadro + table.posY;
         square(posX, posY, dimCuadro);
       }
     }
@@ -81,24 +79,6 @@ class Polyomino extends Figure implements Cloneable {
     return false;
   }
   
-  /*boolean rightKnock(Tablero table) {
-
-  for (int j = 0; j < numMono; j++)
-  {
-    for (int i = j; i <= numArray; i += numMono) {
-      if ((rotations[rotation] & (1 << i)) != 0) {
-        posX = ((numArray-i)%numMono) + column;
-        posY = (((numArray-i)/numMono)|0) + row;
-        if (posY>=0 && (table.repMemoria.get(posY)[posX+1] != 0))
-          return true;
-      }
-    }
-  }
-  return false;
-}*/
-
-
-
   boolean colisionLateral (int numRevisar) { //numRevisar =1, es para colision Derecha
     for (int j = 0; j < numMono; j++)
     {
@@ -118,22 +98,6 @@ class Polyomino extends Figure implements Cloneable {
     }
     return false;
   }
-  
-  /*boolean leftKnock(Tablero table) {
-
-  for (int j = 0; j < numMono; j++)
-  {
-    for (int i = j; i <= numArray; i += numMono) {
-      if ((rotations[rotation] & (1 << numArray - i)) != 0) {
-        posX = (i%numMono) + column;
-        posY = ((i/numMono)|0) + row;
-        if (posY>=0 && (table.repMemoria.get(posY)[posX-1] != 0))
-          return true;
-      }
-    }
-  }
-  return false;
-}*/
   
   void polPosFinal(Tablero table, Polyomino polMove){
     column = polMove.column;
