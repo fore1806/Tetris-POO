@@ -109,7 +109,9 @@ void setup() {
   seleMino = new Tablero(225, 0, 13, 9, tablero, 4, 2);
   polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
   nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-  finalPolyomino = new Polyomino(color(0, 0, 0, 1), color(#3BE0F2), polyominoMove);
+  finalPolyomino = polyominoMove.clone();
+  finalPolyomino.fillColor = color(0, 0, 0, 1);
+  finalPolyomino.strokeColor = color(#3BE0F2);
 
   tablero.inicialize(0);
   nextTablero.inicialize(1);
@@ -136,9 +138,14 @@ void draw() {
     nNextMinos = numMino(numNextT);
     tablero = new Tablero(225, 125, r, c);
     tablero.inicialize(0);
+    nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
+    nextTablero.inicialize(1);
     polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
     nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-    finalPolyomino = new Polyomino(color(0, 0, 0, 1), color(#3BE0F2), polyominoMove);
+    finalPolyomino = polyominoMove.clone();
+    finalPolyomino.fillColor = color(0, 0, 0, 1);
+    finalPolyomino.strokeColor = color(#3BE0F2);
+    //finalPolyomino = new Polyomino(color(0, 0, 0, 1), color(#3BE0F2), polyominoMove);
     changeFacts = !changeFacts;
   }
 
@@ -159,14 +166,14 @@ void draw() {
 
 void keyPressed() {
 
-  if ((key == 's' || key == 'S') && (!polyominoMove.colisionDownRotate(tablero, 0))) {
+  if ((key == 's' || key == 'S') && (!polyominoMove.colisionDownRotate(0))) {
     polyominoMove.moveDown();
-  } else if ((key == 'd' || key == 'D') && (!polyominoMove.colisionLateral(tablero, 1))/* (!polyominoMove.rightKnock(tablero))*/) {
+  } else if ((key == 'd' || key == 'D') && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
     polyominoMove.moveRight();
-  } else if ((key == 'a' || key == 'A') && (!polyominoMove.colisionLateral(tablero, 0))/*(!polyominoMove.leftKnock(tablero))*/) {
+  } else if ((key == 'a' || key == 'A') && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
     polyominoMove.moveLeft();
-  } else if ((key == 'q' || key == 'Q') && (!polyominoMove.colisionDownRotate(tablero, 1))) {
-    polyominoMove.rotatePolyomino(tablero);
+  } else if ((key == 'q' || key == 'Q') && (!polyominoMove.colisionDownRotate(1))) {
+    polyominoMove.rotatePolyomino();
   }
 }
 
@@ -243,11 +250,11 @@ void mousePressed() {
 
 void tiempo() {
   if (millis() - timer >= intervalo) {
-    if (!polyominoMove.colisionDownRotate(tablero, 0)) {
+    if (!polyominoMove.colisionDownRotate(0)) {
       polyominoMove.moveDown();
     } else {
       //println(tablero.filasLlenas);
-      polyominoMove.savePolyomino(tablero);
+      polyominoMove.savePolyomino();
       if ((!tablero.gameOver())) {
         continueGame();
       }
@@ -295,11 +302,15 @@ int numMino (int num) {
 
 void continueGame() {
   tablero.delete();
-  numT = numNextT;
   numNextT = int(random (numMin, numMax));
   nMinos = numMino(numT);
   nNextMinos = numMino(numNextT);
-  polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
+  polyominoMove = nextPolyomino.clone();
+  polyominoMove.row = -1;
+  polyominoMove.table = tablero;
+  polyominoMove.column = ((polyominoMove.table.columns/2) -(polyominoMove.numMono/2));
   nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-  finalPolyomino = new Polyomino(color(0, 0, 0, 1), color(#3BE0F2), polyominoMove);
+  finalPolyomino = polyominoMove.clone();
+  finalPolyomino.fillColor = color(0, 0, 0, 1);
+  finalPolyomino.strokeColor = color(#3BE0F2);
 }

@@ -1,43 +1,31 @@
-class Polyomino extends Figure {
+class Polyomino extends Figure implements Cloneable {
+  
   int row;
   int column;
   int [] rotations = new int [4];
   int rotation;
   int pRotation;
   int dimCuadro;
-  int xTable;
-  int yTable;
+  Tablero table;
+  //int xTable;
+  //int yTable;
   int numMono;
   int numArray;
 
-  Polyomino(color color1, color color2, int [] rotVector, int r, int numeroM, Tablero table) {
+  Polyomino(color color1, color color2, int [] rotVector, int r, int numeroM, Tablero tableT) {
     super(color1, color2);
     row = r;
     rotations = rotVector;
     rotation = 0;
     pRotation = 3;
-    dimCuadro = table.dimCuadro;
-    xTable = table.posX;
-    yTable = table.posY;
+    dimCuadro = tableT.dimCuadro;
+    //xTable = table.posX;
+    //yTable = table.posY;
+    table = tableT;
     numMono = numeroM;
     numArray = (numMono*numMono) -1;
     column = ((table.columns)/2)-(numMono/2);
-  }
-  
-  Polyomino(color color1, color color2, Polyomino polMove){
-    super(color1, color2);
-    row = polMove.row;
-    column = polMove.column;
-    rotations = polMove.rotations;
-    rotation = polMove.rotation;
-    pRotation = polMove.pRotation;
-    dimCuadro = polMove.dimCuadro;
-    xTable = polMove.xTable;
-    yTable = polMove.yTable;
-    numMono = polMove.numMono;
-    numArray = polMove.numArray;
-  }
-  
+  }  
 
   void display() {
     push();
@@ -46,8 +34,8 @@ class Polyomino extends Figure {
     strokeWeight(3);
     for (int i = 0; i <= numArray; i++) {
       if ((rotations[rotation] & (1 << numArray - i)) != 0) {
-        posX = (i%numMono)*dimCuadro + column*dimCuadro + xTable;
-        posY = ((i/numMono)|0) * dimCuadro + row*dimCuadro + yTable;
+        posX = (i%numMono)*dimCuadro + column*dimCuadro + table.posX;//xTable;
+        posY = ((i/numMono)|0) * dimCuadro + row*dimCuadro + table.posY;//yTable;
         square(posX, posY, dimCuadro);
       }
     }
@@ -66,15 +54,15 @@ class Polyomino extends Figure {
     column = column +1;
   }
   
-  void rotatePolyomino(Tablero table){
+  void rotatePolyomino(){
     pRotation = rotation;
     rotation = (rotation+1)%4;
-    if(colisionDownRotate(table, 1)){
+    if(colisionDownRotate(1)){
       rotation = pRotation;
     }
   }
 
-  boolean colisionDownRotate(Tablero table, int numRevisar) {
+  boolean colisionDownRotate(int numRevisar) {
     for (int i = 0; i <= numArray; i++) {
       if (((rotations[rotation] & (1 << numArray - i)) != 0) && numRevisar == 1) { //Rotate Colision
         posX = (i%numMono) + column;
@@ -111,7 +99,7 @@ class Polyomino extends Figure {
 
 
 
-  boolean colisionLateral (Tablero table, int numRevisar) { //numRevisar =1, es para colision Derecha
+  boolean colisionLateral (int numRevisar) { //numRevisar =1, es para colision Derecha
     for (int j = 0; j < numMono; j++)
     {
       for (int i = j; i <= numArray; i += numMono) {
@@ -152,14 +140,14 @@ class Polyomino extends Figure {
     rotation = polMove.rotation;
     for (int r=polMove.row; r <= table.rows-1; r++){
       row = r;
-      if(colisionDownRotate(table, 0)){
+      if(colisionDownRotate(0)){
         break;
       }
     }
     display();
   }
   
-  void savePolyomino(Tablero table){
+  void savePolyomino(){
     for (int i = 0; i <= numArray; i++) {
       if ((rotations[rotation] & (1 << (numArray-i))) != 0) {
         posX = (i%numMono) + column;
@@ -170,4 +158,14 @@ class Polyomino extends Figure {
       }
     }
   }
+  
+  public Polyomino clone(){
+        Polyomino obj=null;
+        try{
+            obj=(Polyomino)super.clone();
+        }catch(CloneNotSupportedException ex){
+            System.out.println(" no se puede duplicar");
+        }
+        return obj;
+    }
 }
