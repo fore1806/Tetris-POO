@@ -126,6 +126,7 @@ void setup() {
   principalS.play();
   tetrisImagen = loadImage("tetris.png");
   gameOverImagen = loadImage("game_over.png");
+  llenarRandomColors();
   coloresIniciales();
 
   setUpGame();
@@ -139,8 +140,6 @@ void setup() {
   tromino = new Polyomino(polyominoColor[2], 0, arrayPolyominos[2], 5, 3, seleMino);
   tetromino = new Polyomino(polyominoColor[4], 0, arrayPolyominos[4], 8, 4, seleMino);
   pentamino = new Polyomino(polyominoColor[11], 0, arrayPolyominos[11], 8, 5, seleMino);
-
-  llenarRandomColors();
 }
 
 
@@ -189,6 +188,14 @@ void keyPressed() {
     if (key == 'u' || key == 'U') {
       screenScores = !screenScores;
       screenGameOver = !screenGameOver;
+    }
+  } else if (screenColores) {
+    if (key == 'u' || key == 'U') {
+      screenColores = !screenColores;
+      screenGame = !screenGame;
+    } else if (key == 'b' || key == 'B') {
+      screenColores = !screenColores;
+      screenConfP = !screenConfP;
     }
   }
 }
@@ -264,11 +271,10 @@ void mousePressed() {
       screenConfP = !screenConfP;
       screenConfT = !screenConfT;
     }
-  }else if (screenColores){
-    colorSeleccionado();
-  } 
-  
-  else if (screenScores) {
+  } else if (screenColores) {
+    changeFacts = !changeFacts;
+    colorSeleccionado(0);
+  } else if (screenScores) {
     if (continueButton.check()) {
       screenScores = !screenScores;
       screenGameOver = !screenGameOver;
@@ -313,14 +319,7 @@ void tiempo() {
 
 
 
-void coloresIniciales() {
-  for (int i=0; i< 29; i++) {
-    int r = (int)random(256);
-    int g = (int)random(256);
-    int b = (int)random(256);
-    polyominoColor[i] = color(r, g, b);
-  }
-}
+
 
 void nSelector(int num) {
   numMin = arrayNumeros[num][0];
@@ -384,7 +383,20 @@ void setUpGame() {
   posFinalPol();
   puntaje = 0;
   nivel = 1;
-  dimCColor = tablero.dimCuadro/2;
+  sizeColor();
+}
+
+void sizeColor() {
+  switch(nMinos) {
+  case 5: 
+    dimCColor = tablero.dimCuadro/2;
+    break;
+  case 4: 
+    dimCColor = 5*tablero.dimCuadro/8;
+    break;
+  default:
+    dimCColor = tablero.dimCuadro;
+  }
 }
 
 void score(Tablero table) {
@@ -433,11 +445,17 @@ void nivel() {
 void llenarRandomColors() {
   for (int i = 0; i < 5; i ++) {
     for (int j = 0; j< 29; j ++) {
-      int r = (int)random(256);
-      int g = (int)random(256);
-      int b = (int)random(256);
+      int r = (int)random(50,256);
+      int g = (int)random(50,256);
+      int b = (int)random(50,256);
       matrizColores[i][j] = color(r, g, b);
     }
+  }
+}
+
+void coloresIniciales() {
+  for (int i=0; i< 29; i++) {
+    polyominoColor[i] = matrizColores[0][i];
   }
 }
 
@@ -453,16 +471,20 @@ void showColor() {
       strokeWeight(2);
       fill(matrizColores[i][j]);
       float mov;
-      switch(nMinos){
-        case 5: mov = 450;
+      switch(nMinos) {
+      case 5: 
+        mov = 450;
         break;
-        case 4: mov = 270;
+      case 4: 
+        mov = 340;
         break;
-        case 3: mov = 120;
+      case 3: 
+        mov = 120;
         break;
-        default:mov = 50;
+      default:
+        mov = 50;
       }
-      
+
       yCuadro = (height/2)- mov;
       x1Cuadro = width/2 - 500;
       x2Cuadro = width/2 + 200;
@@ -496,11 +518,13 @@ void showPolyominos() {
           movY = k-numMin -8;
         }  
         float mov;
-      switch(nMinos){
-        case 5: mov = 50;
-        break;
-        default:mov = 0;
-      }
+        switch(nMinos) {
+        case 5: 
+          mov = 50;
+          break;
+        default:
+          mov = 0;
+        }
         float posX = (i%nMinos)*dimCColor + movX;
         float posY = ((i/nMinos)|0) * dimCColor + movY*dimCColor*4.5 +yCuadro-mov;
         square(posX, posY, dimCColor);
@@ -510,7 +534,7 @@ void showPolyominos() {
   }
 }
 
-void colorSeleccionado() {  //Funcion para la seleccion del color
+void colorSeleccionado(int num) {  //Funcion para la seleccion del color
   for (int i = 0; i<5; i++) {  //Funcion para evaluar la posicion del mouse respecto a los cuadro de colores
     for (int j=numMin; j<numMax; j++) {
       float xEvaluador;
@@ -523,7 +547,16 @@ void colorSeleccionado() {  //Funcion para la seleccion del color
         yEvaluador = yCuadro + 4.5*(j-numMin-8)*dimCColor;
       }
       if ((mouseX>xEvaluador) && (mouseX<(xEvaluador + dimCColor)) && (mouseY>yEvaluador) && (mouseY<(yEvaluador + dimCColor))) {
-        polyominoColor[j] = matrizColores[i][j];  //Se asigna al arreglo de los colores de los tetrominos el color clickeado
+        if (num==0) {
+          polyominoColor[j] = matrizColores[i][j];  //Se asigna al arreglo de los colores de los tetrominos el color clickeado
+        } else {
+          push();
+          noFill();
+          strokeWeight(4);
+          stroke(#3BE0F2);
+          square(xEvaluador, yEvaluador, dimCColor);
+          pop();
+        }
       }
     }
   }
@@ -532,4 +565,5 @@ void colorSeleccionado() {  //Funcion para la seleccion del color
 void coloresScreen() {
   showColor();
   showPolyominos();
+  colorSeleccionado(1);
 }

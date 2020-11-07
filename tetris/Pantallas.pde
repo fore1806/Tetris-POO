@@ -138,11 +138,7 @@ void puntajeLevel(Tablero table) {
 }
 
 void scoreScreen() {
-  
-  continueButton = new Button(width/2, height/2+500, 350, 100, 125, 0, "CONTINUAR", fuente);
-  continueButton.seleccionador();
-  continueButton.display();
-    
+
   push();
   textFont(fuente);
   textAlign(CENTER, CENTER);
@@ -164,9 +160,12 @@ void scoreScreen() {
     text(puntaje, width/2+300, 330 + 60*i);
   }
   pop();
+  continueButton = new Button(width/2, height/2+500, 350, 100, 125, 0, "CONTINUAR", fuente);
+  continueButton.seleccionador();
+  continueButton.display();
 }
 
-void gameOverScreen(){
+void gameOverScreen() {
   image(gameOverImagen, 20, 40, width-40, 330);
 
   restartButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "VOLVER A JUGAR", fuente);
