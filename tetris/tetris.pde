@@ -4,6 +4,7 @@ boolean screenInicial = true;
 boolean screenHow = false;
 boolean screenConfT = false;
 boolean screenConfP = false;
+boolean screenColores = false;
 boolean screenGame = false;
 boolean screenScores = false;
 boolean screenGameOver = false;
@@ -11,7 +12,7 @@ boolean changeFacts = false;
 boolean newScore = true;
 
 SoundFile principalS;
-float L;
+float L;  //tiempo del sonido
 
 PImage tetrisImagen;// Imagen de inicio
 PImage gameOverImagen;//Imagen del game Over
@@ -67,8 +68,8 @@ final int [][] arrayNumeros = {{0, 1}, //monomino
   {1, 2}, //domino
   {2, 4}, //tromino
   {4, 11}, //tetramino
-  {11, 29}, 
-  {0, 29}//pentamino
+  {11, 29}, //pentamino 
+  {0, 29}//n-mino
 };
 
 final int [][] arrayPolyominos = {  {1, 1, 1, 1}, // 0 Monomino
@@ -103,10 +104,18 @@ final int [][] arrayPolyominos = {  {1, 1, 1, 1}, // 0 Monomino
 };
 
 color [] polyominoColor = new color [29];
+color [][] matrizColores = new color [5][29];
+float x1Cuadro;
+float x2Cuadro;
+float posXColor;
+float posYColor;
+float yCuadro;
+float dimCColor;
 
 
 int timer;  //Tiempo 
-int intervalo = 300; 
+int intervalo = 1000; 
+int tiempoJuego;
 
 int x;
 
@@ -130,6 +139,8 @@ void setup() {
   tromino = new Polyomino(polyominoColor[2], 0, arrayPolyominos[2], 5, 3, seleMino);
   tetromino = new Polyomino(polyominoColor[4], 0, arrayPolyominos[4], 8, 4, seleMino);
   pentamino = new Polyomino(polyominoColor[11], 0, arrayPolyominos[11], 8, 5, seleMino);
+
+  llenarRandomColors();
 }
 
 
@@ -147,13 +158,15 @@ void draw() {
     confTScreen();
   } else if (screenConfP) {
     confPScreen();
+  } else if (screenColores) {
+    coloresScreen();
   } else if (screenHow) {
     howScreen();
   } else if (screenGame) {
     gameScreen();
   } else if (screenScores) {
     scoreScreen();
-  }  else if(screenGameOver){
+  } else if (screenGameOver) {
     gameOverScreen();
   }
 
@@ -161,23 +174,23 @@ void draw() {
 }
 
 void keyPressed() {
-if(screenGame){
-  if ((keyCode == 83 || keyCode == 40) && (!polyominoMove.colisionDownRotate(0))) {
-    polyominoMove.moveDown();
-    puntaje += nivel;
-  } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
-    polyominoMove.moveRight();
-  } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
-    polyominoMove.moveLeft();
-  } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
-    polyominoMove.rotatePolyomino();
+  if (screenGame) {
+    if ((keyCode == 83 || keyCode == 40) && (!polyominoMove.colisionDownRotate(0))) {
+      polyominoMove.moveDown();
+      puntaje += nivel;
+    } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
+      polyominoMove.moveRight();
+    } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
+      polyominoMove.moveLeft();
+    } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
+      polyominoMove.rotatePolyomino();
+    }
+  } else if (screenScores) {
+    if (key == 'u' || key == 'U') {
+      screenScores = !screenScores;
+      screenGameOver = !screenGameOver;
+    }
   }
-} else if(screenScores){
-  if (key == 'u' || key == 'U') {
-    screenScores = !screenScores;
-    screenGameOver = !screenGameOver;
-  }
-}
 }
 
 void mousePressed() {
@@ -185,6 +198,8 @@ void mousePressed() {
     if (playButton.check()) {
       screenInicial = !screenInicial;
       screenGame = !screenGame;
+      setUpGame();
+      tiempoJuego = millis();
     } else if (configurarButton.check()) {
       screenInicial = !screenInicial;
       screenConfT = !screenConfT;
@@ -240,13 +255,20 @@ void mousePressed() {
       nSelector(5);
       changeFacts = !changeFacts;
     } else if (playButton.check()) {
-      screenGame = !screenGame;
+      screenColores = !screenColores;
+      //screenGame = !screenGame;
       screenConfP = !screenConfP;
+      //setUpGame();
+      //tiempoJuego = millis();
     } else if (backButton.check()) {
       screenConfP = !screenConfP;
       screenConfT = !screenConfT;
     }
-  } else if (screenScores) {
+  }else if (screenColores){
+    colorSeleccionado();
+  } 
+  
+  else if (screenScores) {
     if (continueButton.check()) {
       screenScores = !screenScores;
       screenGameOver = !screenGameOver;
@@ -255,6 +277,8 @@ void mousePressed() {
     if (restartButton.check()) {
       screenGameOver = !screenGameOver;
       screenGame = !screenGame;
+      setUpGame();
+      tiempoJuego = millis();
     } else if (configurarButton.check()) {
       screenGameOver = !screenGameOver;
       screenConfT = !screenConfT;
@@ -272,7 +296,7 @@ void tiempo() {
       polyominoMove.moveDown();
     } else {
       polyominoMove.savePolyomino();
-      if ((!tablero.gameOver())) {
+      if ((!tablero.gameOver(0))) {
         continueGame();
       } else {
         screenGame = !screenGame;//false;
@@ -358,6 +382,9 @@ void setUpGame() {
   polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
   nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
   posFinalPol();
+  puntaje = 0;
+  nivel = 1;
+  dimCColor = tablero.dimCuadro/2;
 }
 
 void score(Tablero table) {
@@ -392,4 +419,117 @@ void saveData(String nombre, int puntaje) {
   score = new JSONObject();
   score.setJSONArray("Top", topScore);
   saveJSONObject(score, "data/Scores.json");
+}
+
+
+void nivel() {
+  if ((millis()>= (tiempoJuego +10000)) && (nivel <15)) {
+    tiempoJuego = millis();
+    nivel += 1;
+    intervalo -= 50;
+  }
+}
+
+void llenarRandomColors() {
+  for (int i = 0; i < 5; i ++) {
+    for (int j = 0; j< 29; j ++) {
+      int r = (int)random(256);
+      int g = (int)random(256);
+      int b = (int)random(256);
+      matrizColores[i][j] = color(r, g, b);
+    }
+  }
+}
+
+//void posColor(int num) {
+//  if (nMinos ==5 && num == 0) {
+//    xCuadro =
+//  }
+//}
+void showColor() {
+  for (int i=0; i<5; i++) {
+    for (int j = numMin; j < numMax; j++) {
+      push();
+      strokeWeight(2);
+      fill(matrizColores[i][j]);
+      float mov;
+      switch(nMinos){
+        case 5: mov = 450;
+        break;
+        case 4: mov = 270;
+        break;
+        case 3: mov = 120;
+        break;
+        default:mov = 50;
+      }
+      
+      yCuadro = (height/2)- mov;
+      x1Cuadro = width/2 - 500;
+      x2Cuadro = width/2 + 200;
+      if (j-numMin <=8) {
+        posXColor = x2Cuadro + i*50;
+        posYColor = yCuadro + 4.5*(j-numMin)*dimCColor;
+      } else {
+        posXColor = x1Cuadro + i*50;
+        posYColor = yCuadro + 4.5*(j-numMin-8)*dimCColor;
+      }
+      square(posXColor, posYColor, dimCColor);
+      pop();
+    }
+  }
+}
+
+void showPolyominos() {
+  for (int k = numMin; k<numMax; k++) {
+    push();
+    strokeWeight(2);
+    fill(polyominoColor[k]);
+    for (int i = 0; i <= ((nMinos*nMinos)-1); i++) {
+      if ((arrayPolyominos[k][0] & (1 << ((nMinos*nMinos)-1) - i)) != 0) {
+        float movX;
+        float movY;
+        if (k-numMin <=8) {
+          movX = x2Cuadro -200;
+          movY = k-numMin;
+        } else {
+          movX = x1Cuadro -200;
+          movY = k-numMin -8;
+        }  
+        float mov;
+      switch(nMinos){
+        case 5: mov = 50;
+        break;
+        default:mov = 0;
+      }
+        float posX = (i%nMinos)*dimCColor + movX;
+        float posY = ((i/nMinos)|0) * dimCColor + movY*dimCColor*4.5 +yCuadro-mov;
+        square(posX, posY, dimCColor);
+      }
+    }
+    pop();
+  }
+}
+
+void colorSeleccionado() {  //Funcion para la seleccion del color
+  for (int i = 0; i<5; i++) {  //Funcion para evaluar la posicion del mouse respecto a los cuadro de colores
+    for (int j=numMin; j<numMax; j++) {
+      float xEvaluador;
+      float yEvaluador;
+      if (j-numMin <=8) {
+        xEvaluador = x2Cuadro + i*50;
+        yEvaluador = yCuadro + 4.5*(j-numMin)*dimCColor;
+      } else {
+        xEvaluador = x1Cuadro + i*50;
+        yEvaluador = yCuadro + 4.5*(j-numMin-8)*dimCColor;
+      }
+      if ((mouseX>xEvaluador) && (mouseX<(xEvaluador + dimCColor)) && (mouseY>yEvaluador) && (mouseY<(yEvaluador + dimCColor))) {
+        polyominoColor[j] = matrizColores[i][j];  //Se asigna al arreglo de los colores de los tetrominos el color clickeado
+      }
+    }
+  }
+}
+
+void coloresScreen() {
+  showColor();
+  showPolyominos();
 }

@@ -116,6 +116,7 @@ void gameScreen() {
   nextTablero.display();
   finalPolyomino.polPosFinal(tablero, polyominoMove);
   puntajeLevel(scoreTab);
+  nivel();
   if (!newScore) {
     newScore = !newScore;
   }
@@ -159,8 +160,8 @@ void scoreScreen() {
     JSONObject persona = topScore.getJSONObject(i);
     int puntaje = persona.getInt("puntaje");
     String nombre = persona.getString("nombre");
-    text(nombre, width/2-300, 320 + 50*i);
-    text(puntaje, width/2+300, 320 + 50*i);
+    text(nombre, width/2-300, 330 + 60*i);
+    text(puntaje, width/2+300, 330 + 60*i);
   }
   pop();
 }

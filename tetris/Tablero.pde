@@ -52,6 +52,8 @@ class Tablero extends Figure {
         repMemoria.get(0)[j]=fillColor;
       }
     }
+
+    gameOver(1);
   }
 
   void display() {
@@ -116,12 +118,16 @@ class Tablero extends Figure {
     addRows();
   }
 
-  boolean gameOver() {
-    for (int i=1; i<=columns-2; i++) {
-      if (repMemoria.get(0)[i] != 0) {
-        return true;
+  boolean gameOver(int num) {
+    if (num ==0) {
+      for (int i=1; i<=columns-2; i++) {
+        if (repMemoria.get(0)[i] != 0) {
+          return true;
+        }
       }
+      return false;
+    } else {
+      return false;
     }
-    return false;
   }
 }
