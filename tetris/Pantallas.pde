@@ -100,12 +100,18 @@ void confPScreen() {
   nminoB = new Button(width/2+350, 590, 350, 70, 125, 0, "N-minó", fuente);
   nminoB.seleccionador();
   nminoB.display();
-  playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
-  playButton.seleccionador();
-  playButton.display();
+  continueButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "CONTINUAR", fuente);
+  continueButton.seleccionador();
+  continueButton.display();
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
   backButton.seleccionador();
   backButton.display();
+}
+
+void coloresScreen() {
+  showColor();
+  showPolyominos();
+  colorSeleccionado(1);
 }
 
 void gameScreen() {
@@ -122,19 +128,6 @@ void gameScreen() {
   }
   //println(tablero.filasLlenas);
   tiempo();
-}
-
-void puntajeLevel(Tablero table) {
-  push();
-  textFont(fuente);
-  textSize(35);
-  textAlign(CENTER, CENTER);
-  fill(table.fillColor);
-  text("LEVEL", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (2*table.dimCuadro));
-  text(nivel, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (3*table.dimCuadro));
-  text("SCORE", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (5*table.dimCuadro));
-  text(puntaje, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (6*table.dimCuadro));
-  pop();
 }
 
 void scoreScreen() {
@@ -177,4 +170,130 @@ void gameOverScreen() {
   inicioButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "INICIO", fuente);
   inicioButton.seleccionador();
   inicioButton.display();
+}
+
+void puntajeLevel(Tablero table) {
+  push();
+  textFont(fuente);
+  textSize(35);
+  textAlign(CENTER, CENTER);
+  fill(table.fillColor);
+  text("LEVEL", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (2*table.dimCuadro));
+  text(nivel, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (3*table.dimCuadro));
+  text("SCORE", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (5*table.dimCuadro));
+  text(puntaje, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (6*table.dimCuadro));
+  pop();
+}
+
+void showColor() {
+  for (int i=0; i<5; i++) {
+    for (int j = numMin; j < numMax; j++) {
+      push();
+      strokeWeight(2);
+      fill(matrizColores[i][j]);
+      float mov;
+      float posXColor;
+      float posYColor;
+      switch(nMinos) {
+      case 5: 
+        mov = 370;
+        break;
+      case 4: 
+        mov = 340;
+        break;
+      case 3: 
+        mov = 120;
+        break;
+      default:
+        mov = 50;
+      }
+
+      yCuadro = (height/2)- mov;
+      x1Cuadro = width/2 - 500;
+      x2Cuadro = width/2 + 200;
+      if (j-numMin <=8) {
+        posXColor = x2Cuadro + i*50;
+        posYColor = yCuadro + 4.5*(j-numMin)*dimCColor;
+      } else {
+        posXColor = x1Cuadro + i*50;
+        posYColor = yCuadro + 4.5*(j-numMin-9)*dimCColor;
+      }
+      square(posXColor, posYColor, dimCColor);
+      pop();
+    }
+  }
+}
+
+void showPolyominos() {
+  for (int k = numMin; k<numMax; k++) {
+    push();
+    strokeWeight(2);
+    fill(polyominoColor[k]);
+    for (int i = 0; i <= ((nMinos*nMinos)-1); i++) {
+      if ((arrayPolyominos[k][0] & (1 << ((nMinos*nMinos)-1) - i)) != 0) {
+        float movX;
+        float movY;
+        if (k-numMin <=8) {
+          movX = x2Cuadro -200;
+          movY = k-numMin;
+        } else {
+          movX = x1Cuadro -200;
+          movY = k-numMin -9;
+        }  
+        float mov;
+        switch(nMinos) {
+        case 5: 
+          mov = 50;
+          break;
+        default:
+          mov = 0;
+        }
+        float posX = (i%nMinos)*dimCColor + movX;
+        float posY = ((i/nMinos)|0) * dimCColor + movY*dimCColor*4.5 +yCuadro-mov;
+        square(posX, posY, dimCColor);
+      }
+    }
+    pop();
+  }
+}
+
+void colorSeleccionado(int num) {  //Funcion para la seleccion del color
+  for (int i = 0; i<5; i++) {  //Funcion para evaluar la posicion del mouse respecto a los cuadro de colores
+    for (int j=numMin; j<numMax; j++) {
+      float xEvaluador;
+      float yEvaluador;
+      if (j-numMin <=8) {
+        xEvaluador = x2Cuadro + i*50;
+        yEvaluador = yCuadro + 4.5*(j-numMin)*dimCColor;
+      } else {
+        xEvaluador = x1Cuadro + i*50;
+        yEvaluador = yCuadro + 4.5*(j-numMin-9)*dimCColor;
+      }
+      if ((mouseX>xEvaluador) && (mouseX<(xEvaluador + dimCColor)) && (mouseY>yEvaluador) && (mouseY<(yEvaluador + dimCColor))) {
+        if (num==0) {
+          polyominoColor[j] = matrizColores[i][j];  //Se asigna al arreglo de los colores de los tetrominos el color clickeado
+        } else {
+          push();
+          noFill();
+          strokeWeight(4);
+          stroke(#3BE0F2);
+          square(xEvaluador, yEvaluador, dimCColor);
+          pop();
+        }
+      }
+    }
+  }
+}
+
+void sizeColor() {
+  switch(nMinos) {
+  case 5: 
+    dimCColor = tablero.dimCuadro/2;
+    break;
+  case 4: 
+    dimCColor = 5*tablero.dimCuadro/8;
+    break;
+  default:
+    dimCColor = tablero.dimCuadro;
+  }
 }
