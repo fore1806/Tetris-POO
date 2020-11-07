@@ -1,8 +1,6 @@
 void inicialScreen() {
   image(tetrisImagen, 20, 40, width-40, 330);
-  
-  
-  
+
   playButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "JUGAR", fuente);
   playButton.seleccionador();
   playButton.display();
@@ -118,6 +116,9 @@ void gameScreen() {
   nextTablero.display();
   finalPolyomino.polPosFinal(tablero, polyominoMove);
   puntajeLevel(scoreTab);
+  if (!newScore) {
+    newScore = !newScore;
+  }
   //println(tablero.filasLlenas);
   tiempo();
 }
@@ -133,4 +134,47 @@ void puntajeLevel(Tablero table) {
   text("SCORE", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (5*table.dimCuadro));
   text(puntaje, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (6*table.dimCuadro));
   pop();
+}
+
+void scoreScreen() {
+  
+  continueButton = new Button(width/2, height/2+500, 350, 100, 125, 0, "CONTINUAR", fuente);
+  continueButton.seleccionador();
+  continueButton.display();
+    
+  push();
+  textFont(fuente);
+  textAlign(CENTER, CENTER);
+  fill(240);
+  //Titulo
+  textSize(80);
+  text("Tu puntaje fue:", width/2, 50);
+  textSize(50);
+  text(puntaje, width/2, 150);
+  text("Jugador", width/2-300, 270);
+  text("Puntaje", width/2+300, 270);
+
+  JSONArray topScore = loadData();
+  for (int i = 0; i < topScore.size(); i++) {
+    JSONObject persona = topScore.getJSONObject(i);
+    int puntaje = persona.getInt("puntaje");
+    String nombre = persona.getString("nombre");
+    text(nombre, width/2-300, 320 + 50*i);
+    text(puntaje, width/2+300, 320 + 50*i);
+  }
+  pop();
+}
+
+void gameOverScreen(){
+  image(gameOverImagen, 20, 40, width-40, 330);
+
+  restartButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "VOLVER A JUGAR", fuente);
+  restartButton.seleccionador();
+  restartButton.display();
+  configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
+  configurarButton.seleccionador();
+  configurarButton.display();
+  inicioButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "INICIO", fuente);
+  inicioButton.seleccionador();
+  inicioButton.display();
 }

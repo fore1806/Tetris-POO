@@ -1,9 +1,17 @@
+import processing.sound.*;
+
 boolean screenInicial = true;
 boolean screenHow = false;
 boolean screenConfT = false;
 boolean screenConfP = false;
 boolean screenGame = false;
+boolean screenScores = false;
+boolean screenGameOver = false;
 boolean changeFacts = false;
+boolean newScore = true;
+
+SoundFile principalS;
+float L;
 
 PImage tetrisImagen;// Imagen de inicio
 PImage gameOverImagen;//Imagen del game Over
@@ -50,6 +58,9 @@ Button troB;
 Button tetroB;
 Button pentaB;
 Button nminoB;
+Button continueButton;
+Button restartButton;
+Button inicioButton;
 
 
 final int [][] arrayNumeros = {{0, 1}, //monomino
@@ -102,12 +113,14 @@ int x;
 
 void setup() {
   size(1450, 840);
+  principalS = new SoundFile(this, "tetris.mp3");
+  principalS.play();
   tetrisImagen = loadImage("tetris.png");
   gameOverImagen = loadImage("game_over.png");
   coloresIniciales();
-  
+
   setUpGame();
- 
+
   seleMino = new Tablero(225, 0, 13, 9, tablero, 4, 2);
   seleMino.inicialize(1);
   fuente = createFont("Comic Sans MS", 60);
@@ -138,15 +151,20 @@ void draw() {
     howScreen();
   } else if (screenGame) {
     gameScreen();
+  } else if (screenScores) {
+    scoreScreen();
+  }  else if(screenGameOver){
+    gameOverScreen();
   }
-  
+
   println(puntaje);
 }
 
 void keyPressed() {
-
+if(screenGame){
   if ((keyCode == 83 || keyCode == 40) && (!polyominoMove.colisionDownRotate(0))) {
     polyominoMove.moveDown();
+    puntaje += nivel;
   } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
     polyominoMove.moveRight();
   } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
@@ -154,6 +172,12 @@ void keyPressed() {
   } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
     polyominoMove.rotatePolyomino();
   }
+} else if(screenScores){
+  if (key == 'u' || key == 'U') {
+    screenScores = !screenScores;
+    screenGameOver = !screenGameOver;
+  }
+}
 }
 
 void mousePressed() {
@@ -222,6 +246,22 @@ void mousePressed() {
       screenConfP = !screenConfP;
       screenConfT = !screenConfT;
     }
+  } else if (screenScores) {
+    if (continueButton.check()) {
+      screenScores = !screenScores;
+      screenGameOver = !screenGameOver;
+    }
+  } else if (screenGameOver) {
+    if (restartButton.check()) {
+      screenGameOver = !screenGameOver;
+      screenGame = !screenGame;
+    } else if (configurarButton.check()) {
+      screenGameOver = !screenGameOver;
+      screenConfT = !screenConfT;
+    } else if (inicioButton.check()) {
+      screenGameOver = !screenGameOver;
+      screenInicial = !screenInicial;
+    }
   }
 }
 
@@ -234,17 +274,19 @@ void tiempo() {
       polyominoMove.savePolyomino();
       if ((!tablero.gameOver())) {
         continueGame();
+      } else {
+        screenGame = !screenGame;//false;
+        screenScores = !screenScores;//true;
+        if (newScore) {
+          saveData("Felipe", puntaje);
+          newScore = !newScore;
+        }
       }
     }
     timer = millis();  //Asignamos el valor de millis a la variable para asi empezar un nuevo "intervalo"
   }
 }
 
-
-void changeScreen(boolean screen1, boolean screen2) {
-  screen1 = !screen1;
-  screen2 = !screen2;
-}
 
 
 void coloresIniciales() {
@@ -289,39 +331,65 @@ void continueGame() {
   posFinalPol();
 }
 
-void posFinalPol(){
+void posFinalPol() {
   finalPolyomino = polyominoMove.clone();
   finalPolyomino.fillColor = color(0, 0, 0, 1);
   finalPolyomino.strokeColor = color(#3BE0F2);
 }
 
-void varNewPol(){
+void varNewPol() {
   polyominoMove = nextPolyomino.clone();
   polyominoMove.row = -1;
   polyominoMove.table = tablero;
   polyominoMove.column = ((polyominoMove.table.columns/2) -(polyominoMove.numMono/2));
 }
 
-void setUpGame(){
-    numT = int(random (numMin, numMax));
-    numNextT = int(random (numMin, numMax));
-    nMinos = numMino(numT);
-    nNextMinos = numMino(numNextT);
-    tablero = new Tablero(225, 125, r, c);
-    tablero.inicialize(0);
-    scoreTab = new Tablero(225, 0, 9, 9, tablero, 4, 1);
-    scoreTab.inicialize(1);
-    nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
-    nextTablero.inicialize(1);
-    polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
-    nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-    posFinalPol();
+void setUpGame() {
+  numT = int(random (numMin, numMax));
+  numNextT = int(random (numMin, numMax));
+  nMinos = numMino(numT);
+  nNextMinos = numMino(numNextT);
+  tablero = new Tablero(225, 125, r, c);
+  tablero.inicialize(0);
+  scoreTab = new Tablero(225, 0, 9, 9, tablero, 4, 1);
+  scoreTab.inicialize(1);
+  nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
+  nextTablero.inicialize(1);
+  polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
+  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+  posFinalPol();
 }
 
-void score(Tablero table){
+void score(Tablero table) {
   if (table.filasAEliminar>0) {
-      puntaje += 100 * pow(2, table.filasAEliminar);
-    } else {
-      puntaje +=0;
+    puntaje += 100 * pow(2, table.filasAEliminar);
+  } else {
+    puntaje +=0;
+  }
+}
+
+JSONArray loadData() {
+  JSONObject score = loadJSONObject("data/Scores.json");
+  JSONArray topScore = score.getJSONArray("Top");
+  return topScore;
+}
+
+void saveData(String nombre, int puntaje) {
+  JSONArray topScore = loadData();
+  JSONObject score;
+  for (int i = 0; i < topScore.size(); i++) {
+    JSONObject persona = topScore.getJSONObject(i);
+    int puntajeM = persona.getInt("puntaje");
+    if (puntaje > puntajeM) {
+      String nameTem = persona.getString("nombre");
+      int puntajeTem = persona.getInt("puntaje");
+      persona.setInt("puntaje", puntaje);
+      persona.setString("nombre", nombre);
+      nombre = nameTem;
+      puntaje = puntajeTem;
     }
+  }
+  score = new JSONObject();
+  score.setJSONArray("Top", topScore);
+  saveJSONObject(score, "data/Scores.json");
 }
