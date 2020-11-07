@@ -19,6 +19,9 @@ int numMax = 11;//Numero siguiente al maximo que deseamos sacar
 int numT;
 int numNextT;
 
+int puntaje = 0;
+int nivel = 1;
+
 
 Tablero tablero;
 Tablero nextTablero;
@@ -136,17 +139,19 @@ void draw() {
   } else if (screenGame) {
     gameScreen();
   }
+  
+  println(puntaje);
 }
 
 void keyPressed() {
 
-  if ((key == 's' || key == 'S') && (!polyominoMove.colisionDownRotate(0))) {
+  if ((keyCode == 83 || keyCode == 40) && (!polyominoMove.colisionDownRotate(0))) {
     polyominoMove.moveDown();
-  } else if ((key == 'd' || key == 'D') && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
+  } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
     polyominoMove.moveRight();
-  } else if ((key == 'a' || key == 'A') && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
+  } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
     polyominoMove.moveLeft();
-  } else if ((key == 'q' || key == 'Q') && (!polyominoMove.colisionDownRotate(1))) {
+  } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
     polyominoMove.rotatePolyomino();
   }
 }
@@ -274,6 +279,8 @@ int numMino (int num) {
 
 void continueGame() {
   tablero.delete();
+  score(tablero);
+  tablero.setupRowsToDelete();
   numNextT = int(random (numMin, numMax));
   nMinos = numMino(numT);
   nNextMinos = numMino(numNextT);
@@ -309,4 +316,12 @@ void setUpGame(){
     polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
     nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
     posFinalPol();
+}
+
+void score(Tablero table){
+  if (table.filasAEliminar>0) {
+      puntaje += 100 * pow(2, table.filasAEliminar);
+    } else {
+      puntaje +=0;
+    }
 }

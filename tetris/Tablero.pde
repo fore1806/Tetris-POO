@@ -1,5 +1,5 @@
 class Tablero extends Figure {
-  
+
   int rows;
   int columns;
   int dimCuadro;
@@ -18,7 +18,7 @@ class Tablero extends Figure {
       posX = ((width-table.columns*dimCuadro)/4)-((columns/2)*dimCuadro);
     } else if (numEv == 1) {
       posX = 3*width/4+table.columns*dimCuadro/4-dimCuadro*columns/2;
-    } else{
+    } else {
       posX = ((width-table.columns*dimCuadro)/2)-((columns/2)*dimCuadro);
     }
   }
@@ -92,8 +92,6 @@ class Tablero extends Figure {
   void deleteRows() {
     for (int k=0; k<4 && (filasLlenas[k]!=rows-1); k++) {  //Eliminamos todas las filas completas
       repMemoria.remove(filasLlenas[k]);
-      //puntaje = puntaje + (85*nivel) - nivel + (filasAEliminar*15);
-      //eliminatedRows +=1;
     }
   }
 
@@ -116,7 +114,6 @@ class Tablero extends Figure {
     completedRows();
     deleteRows();
     addRows();
-    setupRowsToDelete();
   }
 
   boolean gameOver() {

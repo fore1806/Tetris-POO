@@ -1,5 +1,5 @@
 class Polyomino extends Figure implements Cloneable {
-  
+
   int row;
   int column;
   int [] rotations = new int [4];
@@ -17,8 +17,6 @@ class Polyomino extends Figure implements Cloneable {
     rotation = 0;
     pRotation = 3;
     dimCuadro = tableT.dimCuadro;
-    //xTable = table.posX;
-    //yTable = table.posY;
     table = tableT;
     numMono = numeroM;
     numArray = (numMono*numMono) -1;
@@ -43,19 +41,19 @@ class Polyomino extends Figure implements Cloneable {
   void moveDown() {
     row = row+1;
   }
-  
+
   void moveLeft() {
     column = column -1;
   }
-  
-  void moveRight(){
+
+  void moveRight() {
     column = column +1;
   }
-  
-  void rotatePolyomino(){
+
+  void rotatePolyomino() {
     pRotation = rotation;
     rotation = (rotation+1)%4;
-    if(colisionDownRotate(1)){
+    if (colisionDownRotate(1)) {
       rotation = pRotation;
     }
   }
@@ -78,7 +76,7 @@ class Polyomino extends Figure implements Cloneable {
     }
     return false;
   }
-  
+
   boolean colisionLateral (int numRevisar) { //numRevisar =1, es para colision Derecha
     for (int j = 0; j < numMono; j++)
     {
@@ -98,38 +96,39 @@ class Polyomino extends Figure implements Cloneable {
     }
     return false;
   }
-  
-  void polPosFinal(Tablero table, Polyomino polMove){
+
+  void polPosFinal(Tablero table, Polyomino polMove) {
     column = polMove.column;
     rotation = polMove.rotation;
-    for (int r=polMove.row; r <= table.rows-1; r++){
+    for (int r=polMove.row; r <= table.rows-1; r++) {
       row = r;
-      if(colisionDownRotate(0)){
+      if (colisionDownRotate(0)) {
         break;
       }
     }
     display();
   }
-  
-  void savePolyomino(){
+
+  void savePolyomino() {
     for (int i = 0; i <= numArray; i++) {
       if ((rotations[rotation] & (1 << (numArray-i))) != 0) {
         posX = (i%numMono) + column;
         posY = ((i/numMono)|0) + row;
-        if(posY>=0){
-        table.repMemoria.get(posY)[posX]=fillColor;
+        if (posY>=0) {
+          table.repMemoria.get(posY)[posX]=fillColor;
         }
       }
     }
   }
-  
-  public Polyomino clone(){
-        Polyomino obj=null;
-        try{
-            obj=(Polyomino)super.clone();
-        }catch(CloneNotSupportedException ex){
-            System.out.println(" no se puede duplicar");
-        }
-        return obj;
+
+  public Polyomino clone() {
+    Polyomino obj=null;
+    try {
+      obj=(Polyomino)super.clone();
     }
+    catch(CloneNotSupportedException ex) {
+      System.out.println(" no se puede duplicar");
+    }
+    return obj;
+  }
 }

@@ -1,10 +1,16 @@
 void inicialScreen() {
   image(tetrisImagen, 20, 40, width-40, 330);
+  
+  
+  
   playButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "JUGAR", fuente);
+  playButton.seleccionador();
   playButton.display();
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
+  configurarButton.seleccionador();
   configurarButton.display();
   howButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
+  howButton.seleccionador();
   howButton.display();
 }
 
@@ -29,8 +35,10 @@ void howScreen() {
   pop();
 
   playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
+  playButton.seleccionador();
   playButton.display();
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
+  backButton.seleccionador();
   backButton.display();
 }
 
@@ -44,18 +52,23 @@ void confTScreen() {
   text("Escoge el tamaño del tablero", width/2, 80);
   pop();
   tab1Button = new Button(width/2, height/2-120, 350, 100, 125, 0, "19 X 10", fuente);
+  tab1Button.seleccionador();
   tab1Button.display();
   tab2Button = new Button(width/2, height/2+25, 350, 100, 125, 0, "20 X 12", fuente);
+  tab2Button.seleccionador();
   tab2Button.display();
   tab3Button = new Button(width/2, height/2+175, 350, 100, 125, 0, "23 X 14", fuente);
+  tab3Button.seleccionador();
   tab3Button.display();
   configurarButton = new Button(width/2+350, height/2+330, 410, 100, 125, 0, "CONFIGURAR", fuente);
+  configurarButton.seleccionador();
   configurarButton.display();
   backButton = new Button(width/2-350, height/2+330, 410, 100, 125, 0, "VOLVER", fuente);
+  backButton.seleccionador();
   backButton.display();
 }
 
-void confPScreen(){
+void confPScreen() {
   push();
   textFont(fuente);
   textAlign(CENTER, CENTER);
@@ -70,24 +83,30 @@ void confPScreen(){
   tromino.display();
   tetromino.display();
   pentamino.display();
-  
+
   monoB = new Button(width/2+350, 190, 350, 70, 125, 0, "Monominó", fuente);
+  monoB.seleccionador();
   monoB.display();
   doB = new Button(width/2+350, 270, 350, 70, 125, 0, "Dominó", fuente);
+  doB.seleccionador();
   doB.display();
   troB = new Button(width/2+350, 350, 350, 70, 125, 0, "Trominó", fuente);
+  troB.seleccionador();
   troB.display();
   tetroB = new Button(width/2+350, 430, 350, 70, 125, 0, "Tetrominó", fuente);
+  tetroB.seleccionador();
   tetroB.display();
   pentaB = new Button(width/2+350, 510, 350, 70, 125, 0, "Pentaminó", fuente);
+  pentaB.seleccionador();
   pentaB.display();
   nminoB = new Button(width/2+350, 590, 350, 70, 125, 0, "N-minó", fuente);
+  nminoB.seleccionador();
   nminoB.display();
-  
-  
   playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
+  playButton.seleccionador();
   playButton.display();
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
+  backButton.seleccionador();
   backButton.display();
 }
 
@@ -98,6 +117,20 @@ void gameScreen() {
   nextPolyomino.display();
   nextTablero.display();
   finalPolyomino.polPosFinal(tablero, polyominoMove);
-  println(tablero.filasLlenas);
+  puntajeLevel(scoreTab);
+  //println(tablero.filasLlenas);
   tiempo();
+}
+
+void puntajeLevel(Tablero table) {
+  push();
+  textFont(fuente);
+  textSize(35);
+  textAlign(CENTER, CENTER);
+  fill(table.fillColor);
+  text("LEVEL", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (2*table.dimCuadro));
+  text(nivel, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (3*table.dimCuadro));
+  text("SCORE", table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (5*table.dimCuadro));
+  text(puntaje, table.posX + (((table.columns/2)+0.5)*table.dimCuadro), table.posY + (6*table.dimCuadro));
+  pop();
 }
