@@ -145,16 +145,16 @@ void scoreScreen() {
   text("Tu puntaje fue:", width/2, 50);
   textSize(50);
   text(puntaje, width/2, 150);
-  text("Jugador", width/2-300, 270);
-  text("Puntaje", width/2+300, 270);
+  text("Jugador", width/2-300, 240);
+  text("Puntaje", width/2+300, 240);
 //Mostrar los mejores puntajes
   JSONArray topScore = loadData();
   for (int i = 0; i < topScore.size(); i++) {
     JSONObject persona = topScore.getJSONObject(i);
     int puntaje = persona.getInt("puntaje");
     String nombre = persona.getString("nombre");
-    text(nombre, width/2-300, 330 + 60*i);
-    text(puntaje, width/2+300, 330 + 60*i);
+    text(nombre, width/2-300, 300 + 60*i);
+    text(puntaje, width/2+300, 300 + 60*i);
   }
   pop();
 }

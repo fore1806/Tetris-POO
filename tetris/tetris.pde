@@ -33,10 +33,10 @@ int numMin = 4;
 int numMax = 11;//Numero siguiente al maximo que deseamos sacar
 int numT;
 int numNextT;
-//Configuración inicial del puntaje y el nivel, y un nomre por defecto para los puntajes
+//Configuración inicial del puntaje y el nivel, y un nombre por defecto para los puntajes
 int puntaje = 0;
 int nivel = 1;
-String nombre = "Felipe";
+String nombre = "---";
 //Objetos de la clase Tablero
 Tablero tablero;
 Tablero nextTablero;
