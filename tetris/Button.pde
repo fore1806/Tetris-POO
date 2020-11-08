@@ -29,7 +29,7 @@ class Button extends Figure {
     pop();
   }
 
-  boolean check() {
+  boolean check() { //Método para saber si el mouse se encuentra sobre el botón
     if ((mouseX > posX - dimX/2) && (mouseX < posX+dimX/2) && (mouseY > posY-dimY/2) && (mouseY < posY+dimY/2)) {
       return true;
     } else {
@@ -37,7 +37,7 @@ class Button extends Figure {
     }
   }
 
-  void seleccionador() {
+  void seleccionador() {  //Metodo para cambiar el color del stroke, que nos indica cuando el mouse esta sobre el botón
     if (check()) {
       stroke2 = strokeColor;
       strokeColor = #3BE0F2;

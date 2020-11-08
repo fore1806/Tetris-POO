@@ -1,15 +1,14 @@
+// Función de tiempo
 void tiempo() {
   if (millis() - timer >= intervalo) {
-    if (!polyominoMove.colisionDownRotate(0)) {
-      polyominoMove.moveDown();
-    } else {
+    if (!polyominoMove.colisionDownRotate(0))  polyominoMove.moveDown();
+    else {
       polyominoMove.savePolyomino();
-      if ((!tablero.gameOver(0))) {
-        continueGame();
-      } else {
-        screenGame = !screenGame;//false;
-        screenScores = !screenScores;//true;
-        if (newScore) {
+      if ((!tablero.gameOver(0))) continueGame();
+      else {
+        screenGame = !screenGame;
+        screenScores = !screenScores;
+        if (newScore) {  //Solo almacenamos el puntaje cuando se pierde y solo una vez
           saveData(nombre, puntaje);
           newScore = !newScore;
         }
@@ -19,52 +18,24 @@ void tiempo() {
   }
 }
 
+//Funcion para definir los numeros entre los que se mueve el valor de numero random
 void nSelector(int num) {
   numMin = arrayNumeros[num][0];
   numMax = arrayNumeros[num][1];
 }
 
+//Funcion para conocer el numero de monomynos que conforman la pieza en juega, para asi desplegarla
 int numMino (int num) {
   int nMino;
-  if (num >= 11) {
-    nMino = 5;
-  } else if (num >= 4) {
-    nMino = 4;
-  } else if (num >= 2) {
-    nMino = 3;
-  } else if (num == 1) {
-    nMino = 2;
-  } else {
-    nMino = 1;
-  }
+  if (num >= 11) nMino = 5;
+  else if (num >= 4) nMino = 4;
+  else if (num >= 2) nMino = 3;
+  else if (num == 1) nMino = 2;
+  else nMino = 1;
   return nMino;
 }
 
-void continueGame() {
-  tablero.delete();
-  score(tablero);
-  tablero.setupRowsToDelete();
-  numNextT = int(random (numMin, numMax));
-  nMinos = numMino(numT);
-  nNextMinos = numMino(numNextT);
-  varNewPol();
-  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
-  posFinalPol();
-}
-
-void posFinalPol() {
-  finalPolyomino = polyominoMove.clone();
-  finalPolyomino.fillColor = color(0, 0, 0, 1);
-  finalPolyomino.strokeColor = color(#3BE0F2);
-}
-
-void varNewPol() {
-  polyominoMove = nextPolyomino.clone();
-  polyominoMove.row = -1;
-  polyominoMove.table = tablero;
-  polyominoMove.column = ((polyominoMove.table.columns/2) -(polyominoMove.numMono/2));
-}
-
+//Funcion para inicializar las variables del juego
 void setUpGame() {
   numT = int(random (numMin, numMax));
   numNextT = int(random (numMin, numMax));
@@ -84,6 +55,34 @@ void setUpGame() {
   sizeColor();
 }
 
+//Función para continuar con el juego
+void continueGame() {
+  tablero.delete(); 
+  score(tablero);  //Se modifica el score
+  tablero.setupRowsToDelete();
+  numNextT = int(random (numMin, numMax));
+  nNextMinos = numMino(numNextT);
+  varNewPol();
+  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+  posFinalPol();
+}
+
+//Funcion para setear el siguiente polyomino a mostrar, se debe clonar el nextPolyomino y cambiar algunos atributos
+void varNewPol() {
+  polyominoMove = nextPolyomino.clone();
+  polyominoMove.row = -1;
+  polyominoMove.table = tablero;
+  polyominoMove.column = ((polyominoMove.table.columns/2) -(polyominoMove.numMono/2));
+}
+
+//Funcion para setear la posición final del polyomino, se debe clonar el polyominoMove y cambiar algunos atributos
+void posFinalPol() {
+  finalPolyomino = polyominoMove.clone();
+  finalPolyomino.fillColor = color(0, 0, 0, 1);
+  finalPolyomino.strokeColor = color(#3BE0F2);
+}
+
+//Función para modificar el score, creditos a Gabriel Bojacá (https://github.com/GabrielBojaca) 
 void score(Tablero table) {
   if (table.filasAEliminar>0) {
     puntaje += 100 * pow(2, table.filasAEliminar) + nMinos;
@@ -92,12 +91,14 @@ void score(Tablero table) {
   }
 }
 
+//Funcion para cargar la informacion del JSON 
 JSONArray loadData() {
   JSONObject score = loadJSONObject("data/Scores.json");
   JSONArray topScore = score.getJSONArray("Top");
   return topScore;
 }
 
+//Funcion para guardar en caso de que el puntaje obtenido pertenezca a los high scores
 void saveData(String nombre, int puntaje) {
   JSONArray topScore = loadData();
   JSONObject score;
@@ -118,13 +119,13 @@ void saveData(String nombre, int puntaje) {
   saveJSONObject(score, "data/Scores.json");
 }
 
-
+//Funcion para subir de nivel
 void nivel() {
-  if ((millis()>= (tiempoJuego +10000)) && (nivel <15)) {
+  if ((millis()>= (tiempoJuego +10000)) && (nivel <15)) { //Cada 10 segundos el nivel aumenta
     tiempoJuego = millis();
     nivel += 1;
-    intervalo -= 30;
-    L += 0.005;
+    intervalo -= 30;  //Caeran mas rapidamente las piezas
+    L += 0.005;  //Se aumenta tambien la velocidad de reproduccion de la cancion principal
   }
 }
 
@@ -139,7 +140,7 @@ void llenarRandomColors() {
   }
 }
 
-void coloresIniciales() {
+void coloresIniciales() { //Setear los colores iniciales con la primera columna de arreglo
   for (int i=0; i< 29; i++) {
     polyominoColor[i] = matrizColores[0][i];
   }
@@ -150,25 +151,28 @@ void keyPressed() {
     if ((keyCode == 83 || keyCode == 40) && (!polyominoMove.colisionDownRotate(0))) {
       polyominoMove.moveDown();
       puntaje += nivel;
-    } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))/* (!polyominoMove.rightKnock(tablero))*/) {
+    } else if ((keyCode == 68 || keyCode == 39) && (!polyominoMove.colisionLateral(1))) {
       polyominoMove.moveRight();
-    } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))/*(!polyominoMove.leftKnock(tablero))*/) {
+    } else if ((keyCode == 65 || keyCode == 37) && (!polyominoMove.colisionLateral(0))) {
       polyominoMove.moveLeft();
     } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
       polyominoMove.rotatePolyomino();
     }
   } else if (screenScores) {
-    if (key == 'u' || key == 'U') {
+    if (key == 'n' || key == 'N') {
       screenScores = !screenScores;
       screenGameOver = !screenGameOver;
     }
   } else if (screenColores) {
-    if (key == 'u' || key == 'U') {
+    if (key == 'n' || key == 'N') {
       screenColores = !screenColores;
       screenGame = !screenGame;
     } else if (key == 'b' || key == 'B') {
       screenColores = !screenColores;
       screenConfP = !screenConfP;
+    } else if (key == 'i' || key == 'I'){
+      screenColores = !screenColores;
+      screenInicial = !screenInicial;
     }
   }
 }
@@ -181,11 +185,10 @@ void mousePressed() {
     else if (newtonB.check())nombre=newtonB.texto;
     else if (gaboB.check())nombre=gaboB.texto;
     else if (uribeB.check())nombre=uribeB.texto;
-    else if (continueButton.check()){
+    else if (continueButton.check()) {
       screenName = !screenName;
       screenInicial = !screenInicial;
     }
-    
   } else if (screenInicial) {
     if (playButton.check()) {
       screenInicial = !screenInicial;

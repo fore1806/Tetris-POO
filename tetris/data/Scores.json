@@ -4,6 +4,10 @@
     "nombre": "Felipe"
   },
   {
+    "puntaje": 2637,
+    "nombre": "Felipe"
+  },
+  {
     "puntaje": 2059,
     "nombre": "Felipe"
   },
@@ -14,9 +18,5 @@
   {
     "puntaje": 1033,
     "nombre": "Uribe"
-  },
-  {
-    "puntaje": 259,
-    "nombre": "Felipe"
   }
 ]}
