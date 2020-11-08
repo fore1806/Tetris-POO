@@ -114,6 +114,7 @@ class Tablero extends Figure {
 
   void delete() {
     completedRows();
+    if(filasAEliminar != 0) deleteS.play();
     deleteRows();
     addRows();
   }

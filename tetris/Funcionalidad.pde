@@ -19,10 +19,6 @@ void tiempo() {
   }
 }
 
-
-
-
-
 void nSelector(int num) {
   numMin = arrayNumeros[num][0];
   numMax = arrayNumeros[num][1];

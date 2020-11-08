@@ -13,7 +13,9 @@ boolean changeFacts = false;
 boolean newScore = true;
 
 SoundFile principalS;
+SoundFile deleteS;
 float L;  //tiempo del sonido
+float L2;  //tiempo del sonido de eliminar
 
 PImage tetrisImagen;// Imagen de inicio
 PImage gameOverImagen;//Imagen del game Over
@@ -72,9 +74,6 @@ Button restartButton;  //20
 Button inicioButton;  //21
 
 Button [] arrayButton = new Button[22];
-
-
-
 
 final int [][] arrayNumeros = {{0, 1}, //monomino
   {1, 2}, //domino
@@ -135,7 +134,9 @@ int x;
 void setup() {
   size(1450, 840);
   principalS = new SoundFile(this, "tetris.mp3");
+  deleteS = new SoundFile(this, "eliminacion.mp3");
   principalS.play();
+  principalS.amp(0.3);
   tetrisImagen = loadImage("tetris.png");
   gameOverImagen = loadImage("game_over.png");
   llenarRandomColors();
