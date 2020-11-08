@@ -10,7 +10,7 @@ void tiempo() {
         screenGame = !screenGame;//false;
         screenScores = !screenScores;//true;
         if (newScore) {
-          saveData("Felipe", puntaje);
+          saveData(nombre, puntaje);
           newScore = !newScore;
         }
       }
@@ -177,7 +177,19 @@ void keyPressed() {
 }
 
 void mousePressed() {
-  if (screenInicial) {
+  if (screenName) {
+    if (pazhitnovB.check())nombre=pazhitnovB.texto;
+    else if (obamaB.check())nombre=obamaB.texto;
+    else if (gandhiB.check())nombre=gandhiB.texto;
+    else if (newtonB.check())nombre=newtonB.texto;
+    else if (gaboB.check())nombre=gaboB.texto;
+    else if (uribeB.check())nombre=uribeB.texto;
+    else if (continueButton.check()){
+      screenName = !screenName;
+      screenInicial = !screenInicial;
+    }
+    
+  } else if (screenInicial) {
     if (playButton.check()) {
       screenInicial = !screenInicial;
       screenGame = !screenGame;

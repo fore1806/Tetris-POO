@@ -1,6 +1,7 @@
 import processing.sound.*;
 
-boolean screenInicial = true;
+boolean screenName = true;
+boolean screenInicial = false;
 boolean screenHow = false;
 boolean screenConfT = false;
 boolean screenConfP = false;
@@ -30,6 +31,7 @@ int numNextT;
 
 int puntaje = 0;
 int nivel = 1;
+String nombre = "Felipe";
 
 
 Tablero tablero;
@@ -46,22 +48,32 @@ Polyomino tromino;
 Polyomino tetromino;
 Polyomino pentamino;
 
-Button playButton;
-Button configurarButton;
-Button howButton;
-Button backButton;
-Button tab1Button;
-Button tab2Button;
-Button tab3Button;
-Button monoB;
-Button doB;
-Button troB;
-Button tetroB;
-Button pentaB;
-Button nminoB;
-Button continueButton;
-Button restartButton;
-Button inicioButton;
+Button pazhitnovB; //0
+Button obamaB; //1
+Button gandhiB; //2
+Button uribeB; //3
+Button gaboB; //4
+Button newtonB; //5
+Button continueButton; //6
+Button playButton; //7
+Button configurarButton; //8
+Button howButton; //9
+Button backButton; //10
+Button tab1Button; //11
+Button tab2Button; //12
+Button tab3Button; //13
+Button monoB; //14
+Button doB; //15
+Button troB; //16
+Button tetroB; //17
+Button pentaB; //18
+Button nminoB;  //19
+Button restartButton;  //20
+Button inicioButton;  //21
+
+Button [] arrayButton = new Button[22];
+
+
 
 
 final int [][] arrayNumeros = {{0, 1}, //monomino
@@ -140,6 +152,8 @@ void setup() {
   tromino = new Polyomino(polyominoColor[2], 0, arrayPolyominos[2], 5, 3, seleMino);
   tetromino = new Polyomino(polyominoColor[4], 0, arrayPolyominos[4], 8, 4, seleMino);
   pentamino = new Polyomino(polyominoColor[11], 0, arrayPolyominos[11], 8, 5, seleMino);
+
+  buttonArray();
 }
 
 
@@ -151,7 +165,9 @@ void draw() {
     changeFacts = !changeFacts;
   }
 
-  if (screenInicial) {
+  if (screenName) {
+    nameScreen();
+  } else if (screenInicial) {
     inicialScreen();
   } else if (screenConfT) {
     confTScreen();

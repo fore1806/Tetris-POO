@@ -1,15 +1,33 @@
+void nameScreen() {
+  image(tetrisImagen, 20, 20, width-40, 330);
+  push();
+  textFont(fuente);
+  textAlign(CENTER, CENTER);
+  fill(240);
+  //Titulo
+  textSize(80);
+  text("Escoge tu Nombre", width/2, 370);
+  pop();
+
+  pazhitnovB = new Button(width/2 - 400, height/2+50, 400, 60, 125, 0, "Pázhitnov", fuente);
+  obamaB = new Button(width/2 - 400, height/2+120, 400, 60, 125, 0, "Obama", fuente);
+  gandhiB  = new Button(width/2 - 400, height/2+190, 400, 60, 125, 0, "Gandhi", fuente);
+  uribeB = new Button(width/2 + 400, height/2+50, 400, 60, 125, 0, "Uribe", fuente);
+  newtonB = new Button(width/2 + 400, height/2+120, 400, 60, 125, 0, "Newton", fuente);
+  gaboB  = new Button(width/2 + 400, height/2+190, 400, 60, 125, 0, "Gabo", fuente);
+  continueButton = new Button(width/2, height/2+300, 550, 100, 125, 0, "CONTINUAR", fuente);
+  buttonArray();
+  mostrador(0,6);
+}
+
 void inicialScreen() {
   image(tetrisImagen, 20, 40, width-40, 330);
 
   playButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "JUGAR", fuente);
-  playButton.seleccionador();
-  playButton.display();
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
-  configurarButton.seleccionador();
-  configurarButton.display();
   howButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
-  howButton.seleccionador();
-  howButton.display();
+  buttonArray();
+  mostrador(7,9);
 }
 
 void howScreen() {
@@ -33,11 +51,9 @@ void howScreen() {
   pop();
 
   playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
-  playButton.seleccionador();
-  playButton.display();
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
-  backButton.seleccionador();
-  backButton.display();
+  buttonArray();
+  mostrador(9,10);
 }
 
 void confTScreen() {
@@ -50,20 +66,13 @@ void confTScreen() {
   text("Escoge el tamaño del tablero", width/2, 80);
   pop();
   tab1Button = new Button(width/2, height/2-120, 350, 100, 125, 0, "19 X 10", fuente);
-  tab1Button.seleccionador();
-  tab1Button.display();
   tab2Button = new Button(width/2, height/2+25, 350, 100, 125, 0, "20 X 12", fuente);
-  tab2Button.seleccionador();
-  tab2Button.display();
   tab3Button = new Button(width/2, height/2+175, 350, 100, 125, 0, "23 X 14", fuente);
-  tab3Button.seleccionador();
-  tab3Button.display();
-  configurarButton = new Button(width/2+350, height/2+330, 410, 100, 125, 0, "CONFIGURAR", fuente);
-  configurarButton.seleccionador();
-  configurarButton.display();
   backButton = new Button(width/2-350, height/2+330, 410, 100, 125, 0, "VOLVER", fuente);
-  backButton.seleccionador();
-  backButton.display();
+  configurarButton = new Button(width/2+350, height/2+330, 410, 100, 125, 0, "CONFIGURAR", fuente);
+  buttonArray();
+  mostrador(8,8);
+  mostrador(10,13);
 }
 
 void confPScreen() {
@@ -83,29 +92,17 @@ void confPScreen() {
   pentamino.display();
 
   monoB = new Button(width/2+350, 190, 350, 70, 125, 0, "Monominó", fuente);
-  monoB.seleccionador();
-  monoB.display();
   doB = new Button(width/2+350, 270, 350, 70, 125, 0, "Dominó", fuente);
-  doB.seleccionador();
-  doB.display();
   troB = new Button(width/2+350, 350, 350, 70, 125, 0, "Trominó", fuente);
-  troB.seleccionador();
-  troB.display();
   tetroB = new Button(width/2+350, 430, 350, 70, 125, 0, "Tetrominó", fuente);
-  tetroB.seleccionador();
-  tetroB.display();
   pentaB = new Button(width/2+350, 510, 350, 70, 125, 0, "Pentaminó", fuente);
-  pentaB.seleccionador();
-  pentaB.display();
   nminoB = new Button(width/2+350, 590, 350, 70, 125, 0, "N-minó", fuente);
-  nminoB.seleccionador();
-  nminoB.display();
-  continueButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "CONTINUAR", fuente);
-  continueButton.seleccionador();
-  continueButton.display();
-  backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
-  backButton.seleccionador();
-  backButton.display();
+  continueButton = new Button(width/2+350, height/2+330, 450, 100, 125, 0, "CONTINUAR", fuente);
+  backButton = new Button(width/2-350, height/2+330, 450, 100, 125, 0, "VOLVER", fuente);
+  buttonArray();
+  mostrador(6,6);
+  mostrador(10,10);
+  mostrador(14,19);
 }
 
 void coloresScreen() {
@@ -126,7 +123,6 @@ void gameScreen() {
   if (!newScore) {
     newScore = !newScore;
   }
-  //println(tablero.filasLlenas);
   tiempo();
 }
 
@@ -153,23 +149,17 @@ void scoreScreen() {
     text(puntaje, width/2+300, 330 + 60*i);
   }
   pop();
-  continueButton = new Button(width/2, height/2+500, 350, 100, 125, 0, "CONTINUAR", fuente);
-  continueButton.seleccionador();
-  continueButton.display();
 }
 
 void gameOverScreen() {
   image(gameOverImagen, 20, 40, width-40, 330);
 
   restartButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "VOLVER A JUGAR", fuente);
-  restartButton.seleccionador();
-  restartButton.display();
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
-  configurarButton.seleccionador();
-  configurarButton.display();
   inicioButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "INICIO", fuente);
-  inicioButton.seleccionador();
-  inicioButton.display();
+  buttonArray();
+  mostrador(8,8);
+  mostrador(20,21);
 }
 
 void puntajeLevel(Tablero table) {
@@ -194,9 +184,11 @@ void showColor() {
       float mov;
       float posXColor;
       float posYColor;
+      x2Cuadro = width/2 - 50;
       switch(nMinos) {
       case 5: 
         mov = 370;
+        x2Cuadro = width/2 + 300;
         break;
       case 4: 
         mov = 340;
@@ -209,8 +201,7 @@ void showColor() {
       }
 
       yCuadro = (height/2)- mov;
-      x1Cuadro = width/2 - 500;
-      x2Cuadro = width/2 + 200;
+      x1Cuadro = width/2 - 400;
       if (j-numMin <=8) {
         posXColor = x2Cuadro + i*50;
         posYColor = yCuadro + 4.5*(j-numMin)*dimCColor;
@@ -295,5 +286,37 @@ void sizeColor() {
     break;
   default:
     dimCColor = tablero.dimCuadro;
+  }
+}
+
+void buttonArray() {
+  arrayButton[0] = pazhitnovB; //0
+  arrayButton[1] = obamaB; //1
+  arrayButton[2] =  gandhiB; //2
+  arrayButton[3] =uribeB; //3
+  arrayButton[4]= gaboB; //4
+  arrayButton[5]= newtonB; //5
+  arrayButton[6]= continueButton; //6
+  arrayButton[7]= howButton; //7
+  arrayButton[8]= configurarButton; //8
+  arrayButton[9]= playButton; //9
+  arrayButton[10] =backButton; //10
+  arrayButton[11]= tab1Button; //11
+  arrayButton[12]= tab2Button; //12
+  arrayButton[13] =tab3Button; //13
+  arrayButton[14]= monoB; //14
+  arrayButton[15]= doB; //15
+  arrayButton[16]= troB; //16
+  arrayButton[17]= tetroB; //17
+  arrayButton[18] =pentaB; //18
+  arrayButton[19]= nminoB;  //19
+  arrayButton[20]= restartButton;  //20
+  arrayButton[21] =inicioButton;  //21
+}
+
+void mostrador(int num1,int num2){
+  for (int i = num1;i<=num2;i++){
+    arrayButton[i].seleccionador();
+    arrayButton[i].display();
   }
 }
