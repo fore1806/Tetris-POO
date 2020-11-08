@@ -43,9 +43,9 @@ void setUpGame() {
   nNextMinos = numMino(numNextT);
   tablero = new Tablero(225, 125, r, c);
   tablero.inicialize(0);
-  scoreTab = new Tablero(225, 0, 9, 9, tablero, 4, 1);
+  scoreTab = new Tablero(225, 0, 9, 9, tablero, 5, 1);
   scoreTab.inicialize(1);
-  nextTablero = new Tablero(225, 0, 9, 9, tablero, 4, 0);
+  nextTablero = new Tablero(225, 0, 9, 9, tablero, 5, 0);
   nextTablero.inicialize(1);
   polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
   nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
@@ -157,11 +157,19 @@ void keyPressed() {
       polyominoMove.moveLeft();
     } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
       polyominoMove.rotatePolyomino();
+    } else if (key == 'p' || key == 'P') {
+      screenPause = !screenPause;
+      screenGame = !screenGame;
     }
   } else if (screenScores) {
     if (key == 'n' || key == 'N') {
       screenScores = !screenScores;
       screenGameOver = !screenGameOver;
+    }
+  } else if (screenPause) {
+    if (key == 'P' || key == 'P') {
+      screenPause = !screenPause;
+      screenGame = !screenGame;
     }
   } else if (screenColores) {
     if (key == 'n' || key == 'N') {
@@ -170,7 +178,7 @@ void keyPressed() {
     } else if (key == 'b' || key == 'B') {
       screenColores = !screenColores;
       screenConfP = !screenConfP;
-    } else if (key == 'i' || key == 'I'){
+    } else if (key == 'i' || key == 'I') {
       screenColores = !screenColores;
       screenInicial = !screenInicial;
     }
@@ -207,8 +215,14 @@ void mousePressed() {
       screenHow = !screenHow;
       screenGame = !screenGame;
     } else if (backButton.check()) {
-      screenInicial = !screenInicial;
       screenHow = !screenHow;
+      switch(numVolver) {
+      case 0: 
+        screenInicial = !screenInicial; 
+        break;
+      case 1: 
+        screenPause = !screenPause;
+      }
     }
   } else if (screenConfT) {
     if (tab1Button.check()) {
@@ -265,6 +279,28 @@ void mousePressed() {
   } else if (screenColores) {
     changeFacts = !changeFacts;
     colorSeleccionado(0);
+  } else if (screenGame) {
+    float d = dist(mouseX, mouseY, pauseBottonX, pauseBottonY);
+    if (d<radioPauseButton) {
+      screenGame = !screenGame;
+      screenPause= !screenPause;
+    }
+  } else if (screenPause) {
+    if (continueButton.check()) {
+      screenPause = !screenPause;
+      screenGame = !screenGame;
+    } else if (restartButton.check()) {
+      screenPause = !screenPause;
+      screenGame = !screenGame;
+      setUpGame();
+      tiempoJuego = millis();
+    } else if (howButton.check()) {
+      screenHow = !screenHow;
+      screenPause = !screenPause;
+    } else if (inicioButton.check()) {
+      screenInicial = !screenInicial;
+      screenPause = !screenPause;
+    }
   } else if (screenScores) {
     if (continueButton.check()) {
       screenScores = !screenScores;

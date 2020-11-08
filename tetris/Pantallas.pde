@@ -8,7 +8,6 @@ void nameScreen() {
   textSize(80);
   text("Escoge tu Nombre", width/2, 370);
   pop();
-
   pazhitnovB = new Button(width/2 - 400, height/2+50, 400, 60, 125, 0, "Pázhitnov", fuente);
   obamaB = new Button(width/2 - 400, height/2+120, 400, 60, 125, 0, "Obama", fuente);
   gandhiB  = new Button(width/2 - 400, height/2+190, 400, 60, 125, 0, "Gandhi", fuente);
@@ -21,8 +20,8 @@ void nameScreen() {
 }
 
 void inicialScreen() {
+  numVolver = 0;
   image(tetrisImagen, 20, 40, width-40, 330);
-
   playButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "JUGAR", fuente);
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
   howButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
@@ -49,7 +48,6 @@ void howScreen() {
   text("Otros atajos de teclado son la tecla B para volver ", width/2, 560);
   text("a la pantalla anterior o R para ir a la pantalla de restart.", width/2, 620);
   pop();
-
   playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
   buttonArray();
@@ -90,7 +88,6 @@ void confPScreen() {
   tromino.display();
   tetromino.display();
   pentamino.display();
-
   monoB = new Button(width/2+350, 190, 350, 70, 125, 0, "Monominó", fuente);
   doB = new Button(width/2+350, 270, 350, 70, 125, 0, "Dominó", fuente);
   troB = new Button(width/2+350, 350, 350, 70, 125, 0, "Trominó", fuente);
@@ -120,14 +117,25 @@ void gameScreen() {
   finalPolyomino.polPosFinal(tablero, polyominoMove);
   puntajeLevel(scoreTab);
   nivel();
+  pauseBotton();
   if (!newScore) {
     newScore = !newScore;
   }
   tiempo();
 }
 
-void scoreScreen() {
+void pauseScreen(){
+  numVolver = 1;
+  continueButton = new Button(width/2, height/2-300, 800, 100, 125, 0, "CONTINUAR", fuente);
+  restartButton = new Button(width/2, height/2-100, 800, 100, 125, 0, "VOLVER A EMPEZAR", fuente);
+  howButton = new Button(width/2, height/2+100, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
+  inicioButton = new Button(width/2, height/2+300, 800, 100, 125, 0, "INICIO", fuente);
+  buttonArray();
+  mostrador(6,7);
+  mostrador(20,21);
+}
 
+void scoreScreen() {
   push();
   textFont(fuente);
   textAlign(CENTER, CENTER);
@@ -139,7 +147,7 @@ void scoreScreen() {
   text(puntaje, width/2, 150);
   text("Jugador", width/2-300, 270);
   text("Puntaje", width/2+300, 270);
-
+//Mostrar los mejores puntajes
   JSONArray topScore = loadData();
   for (int i = 0; i < topScore.size(); i++) {
     JSONObject persona = topScore.getJSONObject(i);
@@ -153,7 +161,6 @@ void scoreScreen() {
 
 void gameOverScreen() {
   image(gameOverImagen, 20, 40, width-40, 330);
-
   restartButton = new Button(width/2, height/2+20, 800, 100, 125, 0, "VOLVER A JUGAR", fuente);
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
   inicioButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "INICIO", fuente);
@@ -162,6 +169,7 @@ void gameOverScreen() {
   mostrador(20,21);
 }
 
+//Funcion para postrar los datos de nivel y puntaje
 void puntajeLevel(Tablero table) {
   push();
   textFont(fuente);
@@ -175,6 +183,7 @@ void puntajeLevel(Tablero table) {
   pop();
 }
 
+//Funcion para mostrar los cuadritos de colores en la pantalla de seleccion de colores
 void showColor() {
   for (int i=0; i<5; i++) {
     for (int j = numMin; j < numMax; j++) {
@@ -199,7 +208,6 @@ void showColor() {
       default:
         mov = 50;
       }
-
       yCuadro = (height/2)- mov;
       x1Cuadro = width/2 - 400;
       if (j-numMin <=8) {
@@ -215,6 +223,7 @@ void showColor() {
   }
 }
 
+//Funcion para mostrar los polyominos en la pantalla de seleccion de color
 void showPolyominos() {
   for (int k = numMin; k<numMax; k++) {
     push();
@@ -276,6 +285,7 @@ void colorSeleccionado(int num) {  //Funcion para la seleccion del color
   }
 }
 
+//Definir el tamaño del cuadro para dibujar los polyominos y los cuadros
 void sizeColor() {
   switch(nMinos) {
   case 5: 
@@ -289,6 +299,7 @@ void sizeColor() {
   }
 }
 
+//Guardamos los botones en un array
 void buttonArray() {
   arrayButton[0] = pazhitnovB; //0
   arrayButton[1] = obamaB; //1
@@ -314,9 +325,22 @@ void buttonArray() {
   arrayButton[21] =inicioButton;  //21
 }
 
+//Metodo para mostrar botones, convierte mas de 2 lineas de codigo en 2
 void mostrador(int num1,int num2){
   for (int i = num1;i<=num2;i++){
     arrayButton[i].seleccionador();
     arrayButton[i].display();
   }
+}
+
+//Funcion para dibujar el boton de pausa
+void pauseBotton() {
+  push();
+  ellipseMode(RADIUS);
+  fill(tablero.fillColor);
+  circle(pauseBottonX, pauseBottonY, radioPauseButton);
+  fill(polyominoMove.strokeColor);
+  rect(pauseBottonX-30, pauseBottonY-30, 20, 60);
+  rect(pauseBottonX+10, pauseBottonY-30, 20, 60);
+  pop();
 }

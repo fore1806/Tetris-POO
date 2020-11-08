@@ -9,6 +9,7 @@ boolean screenConfT = false;
 boolean screenConfP = false;
 boolean screenColores = false;
 boolean screenGame = false;
+boolean screenPause = false;
 boolean screenScores = false;
 boolean screenGameOver = false;
 //Boleanos para cambiar configuraciones o evaluar un nuevo puntaje
@@ -73,6 +74,12 @@ Button pentaB; //18
 Button nminoB;  //19
 Button restartButton;  //20
 Button inicioButton;  //21
+
+//Boton de pausa
+final int pauseBottonX = 1250;
+final int pauseBottonY = 100;
+final int radioPauseButton = 50;
+
 //Arreglo de tipo Button para almacenar los objetos Button y asi mostrarlos mas facilmente
 Button [] arrayButton = new Button[22];
 //Arreglo que define los numeros minimos y maximos para obtener el numero random para elegir el polyomino
@@ -126,6 +133,10 @@ int timer;  //Tiempo
 int intervalo = 700; 
 int tiempoJuego;
 
+int numVolver; //Variable auxiliar para saber si se debe ir a la pantalla de inicio o a la de pause cuando estemos en la de como jugar
+
+
+
 void setup() {
   size(1450, 840);
   principalS = new SoundFile(this, "tetris.mp3"); //Inicializamos el objeto que suena durante el juego
@@ -168,6 +179,8 @@ void draw() {
   else if (screenColores) coloresScreen();
   else if (screenHow) howScreen();
   else if (screenGame) gameScreen();
+  else if (screenPause) pauseScreen();
   else if (screenScores) scoreScreen();
   else if (screenGameOver) gameOverScreen();
+    
 }
