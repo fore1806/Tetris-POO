@@ -1,3 +1,9 @@
+/**
+  *  Tablero
+  * 
+  *  Clase desarrollada para realizar tableros, que hereda de figura 
+  *  Consta de 10 atributos y 8 métodos
+  */
 class Tablero extends Figure {
 
   int rows;
@@ -32,6 +38,11 @@ class Tablero extends Figure {
     repMemoria = new ArrayList<color[]>();
   }
 
+ /**
+   *  Inicializa el arreglo de tipo color.
+   *  @param {int} -Decide si la primera fila hace parte del marco.
+   *  @return{}. 
+   **/
   void inicialize(int num) {
     for (int k = 0; k < rows; k++) {
       repMemoria.add(new color[columns]);
@@ -56,6 +67,11 @@ class Tablero extends Figure {
     gameOver(1);
   }
 
+ /**
+   *  Muestra en pantalla el polyomino.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void display() {
     for (int i=0; i < rows; i++) {
       push();
@@ -79,6 +95,11 @@ class Tablero extends Figure {
     }
   }
 
+ /**
+   *  Contabiliza y separa las filas llenas del tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void completedRows() {
     for (int i = rows - 2; i >= 0; i--) {  //Primero recorremos para ver cuales estan completas
       int j = 0;
@@ -91,12 +112,22 @@ class Tablero extends Figure {
     }
   }
 
+ /**
+   *  Elimina las filas llenas del tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void deleteRows() {
     for (int k=0; k<4 && (filasLlenas[k]!=rows-1); k++) {  //Eliminamos todas las filas completas
       repMemoria.remove(filasLlenas[k]);
     }
   }
 
+ /**
+   *  Añade las filas llenas del tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void addRows() {
     for (int k=0; k<4 && (filasLlenas[k]!=rows-1); k++) {  //Finalmente añadimos las filas que se eliminaron en el paso anterior
       repMemoria.add(0, new color[columns]);
@@ -105,6 +136,11 @@ class Tablero extends Figure {
     }
   }
 
+ /**
+   *  Setea los parámetros de eliminación al estado inicial.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void setupRowsToDelete() {
     filasAEliminar = 0;
     for (int r=0; r<5; r++) {
@@ -112,6 +148,11 @@ class Tablero extends Figure {
     }
   }
 
+ /**
+   *  Condensa los anteriores métodos para su llamado.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void delete() {
     completedRows();
     if(filasAEliminar != 0) deleteS.play();
@@ -119,6 +160,11 @@ class Tablero extends Figure {
     addRows();
   }
 
+ /**
+   *  Devuelve un booleano que indica si hay o no monominos en la 1° fila del tablero.
+   *  @param {}.
+   *  @return{Boolean} -El jugador ha perdido. 
+   **/
   boolean gameOver(int num) {
     if (num ==0) {
       for (int i=1; i<=columns-2; i++) {

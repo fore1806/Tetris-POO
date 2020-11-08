@@ -1,7 +1,15 @@
 {"Top": [
   {
+    "puntaje": 12196,
+    "nombre": "Pázhitnov"
+  },
+  {
     "puntaje": 7041,
     "nombre": "Felipe"
+  },
+  {
+    "puntaje": 6092,
+    "nombre": "---"
   },
   {
     "puntaje": 2637,
@@ -12,23 +20,15 @@
     "nombre": "Felipe"
   },
   {
+    "puntaje": 1447,
+    "nombre": "Newton"
+  },
+  {
     "puntaje": 1070,
     "nombre": "Newton"
   },
   {
     "puntaje": 1033,
     "nombre": "Uribe"
-  },
-  {
-    "puntaje": 180,
-    "nombre": "---"
-  },
-  {
-    "puntaje": 140,
-    "nombre": "---"
-  },
-  {
-    "puntaje": 106,
-    "nombre": "---"
   }
 ]}

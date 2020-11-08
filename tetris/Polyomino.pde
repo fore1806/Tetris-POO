@@ -1,3 +1,9 @@
+/**
+  *  Polyomino
+  * 
+  *  Clase desarrollada para realizar polyominos, que hereda de figura 
+  *  Consta de 14 atributos y 11 métodos
+  */
 class Polyomino extends Figure implements Cloneable {
 
   int row;
@@ -23,6 +29,11 @@ class Polyomino extends Figure implements Cloneable {
     column = ((table.columns)/2)-(numMono/2);
   }  
 
+ /**
+   *  Muestra en pantalla el polyomino.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void display() {
     push();
     fill(fillColor);
@@ -37,19 +48,39 @@ class Polyomino extends Figure implements Cloneable {
     }
     pop();
   }
-
+  
+ /**
+   *  Mueve el polyomino una fila abajo en el tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void moveDown() {
     row = row+1;
   }
 
+ /**
+   *  Mueve el polyomino una columna a la izquierda en el tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void moveLeft() {
     column = column -1;
   }
 
+ /**
+   *  Mueve el polyomino una columna a la derecha en el tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void moveRight() {
     column = column +1;
   }
 
+ /**
+   *  Rota el polyomino 90° en sentido horario.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void rotatePolyomino() {
     pRotation = rotation;
     rotation = (rotation+1)%4;
@@ -57,7 +88,25 @@ class Polyomino extends Figure implements Cloneable {
       rotation = pRotation;
     }
   }
+  
+ /**
+   *  Rota el polyomino 180° en sentido horario.
+   *  @param {}.
+   *  @return{}. 
+   **/
+  void reflectPolyomino() {
+    pRotation = rotation;
+    rotation = (rotation+2)%4;
+    if (colisionDownRotate(1)) {
+      rotation = pRotation;
+    }
+  }
 
+ /**
+   *  Devuelve un booleano que indica si el tetromino.
+   *  @param {int} -Establece si debe evaluar una colisión abajo o de rotación.
+   *  @return{Boolean} -El polyomino no puede rotar o bajar. 
+   **/
   boolean colisionDownRotate(int numRevisar) {
     for (int i = 0; i <= numArray; i++) {
       if (((rotations[rotation] & (1 << numArray - i)) != 0) && numRevisar == 1) { //Rotate Colision
@@ -77,6 +126,11 @@ class Polyomino extends Figure implements Cloneable {
     return false;
   }
 
+ /**
+   *  Devuelve un booleano que indica si el tetromino.
+   *  @param {int} -Establece si debe evaluar una colisión a la izquierda o derecha.
+   *  @return{Boolean} -El polyomino no puede moverse lateralmente. 
+   **/
   boolean colisionLateral (int numRevisar) { //numRevisar =1, es para colision Derecha
     for (int j = 0; j < numMono; j++)
     {
@@ -97,6 +151,11 @@ class Polyomino extends Figure implements Cloneable {
     return false;
   }
 
+ /**
+   *  Define la fila en la que se guardara el polyomino al final.
+   *  @param {Tablero, Polyomino}.
+   *  @return{}. 
+   **/
   void polPosFinal(Tablero table, Polyomino polMove) {
     column = polMove.column;
     rotation = polMove.rotation;
@@ -109,6 +168,11 @@ class Polyomino extends Figure implements Cloneable {
     display();
   }
 
+ /**
+   *  Guarda el polyomino una vez cayo en la representación en memoria del tablero.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void savePolyomino() {
     for (int i = 0; i <= numArray; i++) {
       if ((rotations[rotation] & (1 << (numArray-i))) != 0) {
@@ -120,7 +184,11 @@ class Polyomino extends Figure implements Cloneable {
       }
     }
   }
-
+ /**
+   *  Clona un Polyomino.
+   *  @param {}.
+   *  @return{}. 
+   **/
   public Polyomino clone() {
     Polyomino obj=null;
     try {

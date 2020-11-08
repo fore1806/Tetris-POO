@@ -289,13 +289,13 @@ void colorSeleccionado(int num) {  //Funcion para la seleccion del color
 void sizeColor() {
   switch(nMinos) {
   case 5: 
-    dimCColor = tablero.dimCuadro/2;
+    dimCColor = 20;
     break;
   case 4: 
-    dimCColor = 5*tablero.dimCuadro/8;
+    dimCColor = 25;
     break;
   default:
-    dimCColor = tablero.dimCuadro;
+    dimCColor = 40;
   }
 }
 

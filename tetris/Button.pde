@@ -1,3 +1,9 @@
+/**
+ *  Button
+ * 
+ *  Clase desarrollada para realizar botones, que hereda de figura 
+ *  Consta de 11 atributos y 3 métodos
+ */
 class Button extends Figure {
   int dimX;
   int dimY;
@@ -14,7 +20,12 @@ class Button extends Figure {
     texto = textB;
     fuente = fuenteT;
   }
-
+  
+ /**
+   *  Muestra en pantalla el botón.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void display() {
     push();
     fill(fillColor);
@@ -29,6 +40,11 @@ class Button extends Figure {
     pop();
   }
 
+ /**
+   *  Devuelve un booleano que indica si el mouse esta o no sobre el botón.
+   *  @param {}.
+   *  @return{Boolean} -El mouse esta sobre el botón. 
+   **/
   boolean check() { //Método para saber si el mouse se encuentra sobre el botón
     if ((mouseX > posX - dimX/2) && (mouseX < posX+dimX/2) && (mouseY > posY-dimY/2) && (mouseY < posY+dimY/2)) {
       return true;
@@ -37,6 +53,11 @@ class Button extends Figure {
     }
   }
 
+ /**
+   *  Cambia el color y ancho del borde del botón.
+   *  @param {}.
+   *  @return{}. 
+   **/
   void seleccionador() {  //Metodo para cambiar el color del stroke, que nos indica cuando el mouse esta sobre el botón
     if (check()) {
       stroke2 = strokeColor;

@@ -121,7 +121,7 @@ void saveData(String nombre, int puntaje) {
 
 //Funcion para subir de nivel
 void nivel() {
-  if ((millis()>= (tiempoJuego +10000)) && (nivel <15)) { //Cada 10 segundos el nivel aumenta
+  if ((millis()>= (tiempoJuego +20000)) && (nivel <15)) { //Cada 10 segundos el nivel aumenta
     tiempoJuego = millis();
     nivel += 1;
     intervalo -= 30;  //Caeran mas rapidamente las piezas
@@ -157,7 +157,9 @@ void keyPressed() {
       polyominoMove.moveLeft();
     } else if ((key == 'q' || key == 'Q'|| key == 'O' || key == 'o') && (!polyominoMove.colisionDownRotate(1))) {
       polyominoMove.rotatePolyomino();
-    } else if (key == 'p' || key == 'P') {
+    } else if ((key == 'w' || key == 'W'|| key == 'i' || key == 'I') && (!polyominoMove.colisionDownRotate(1))) {
+      polyominoMove.reflectPolyomino();
+    }else if (key == 'p' || key == 'P') {
       screenPause = !screenPause;
       screenGame = !screenGame;
     }
