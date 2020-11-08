@@ -86,7 +86,7 @@ void setUpGame() {
 
 void score(Tablero table) {
   if (table.filasAEliminar>0) {
-    puntaje += 100 * pow(2, table.filasAEliminar);
+    puntaje += 100 * pow(2, table.filasAEliminar) + nMinos;
   } else {
     puntaje +=0;
   }
@@ -124,6 +124,7 @@ void nivel() {
     tiempoJuego = millis();
     nivel += 1;
     intervalo -= 30;
+    L += 0.005;
   }
 }
 

@@ -14,8 +14,8 @@ boolean newScore = true;
 
 SoundFile principalS;
 SoundFile deleteS;
-float L;  //tiempo del sonido
-float L2;  //tiempo del sonido de eliminar
+float L = 0.75;  //tiempo del sonido
+float L2 = 0.9;  //tiempo del sonido de eliminar
 
 PImage tetrisImagen;// Imagen de inicio
 PImage gameOverImagen;//Imagen del game Over
@@ -137,6 +137,8 @@ void setup() {
   deleteS = new SoundFile(this, "eliminacion.mp3");
   principalS.play();
   principalS.amp(0.3);
+  principalS.rate(L);
+  deleteS.rate(L2);
   tetrisImagen = loadImage("tetris.png");
   gameOverImagen = loadImage("game_over.png");
   llenarRandomColors();

@@ -1,5 +1,9 @@
 {"Top": [
   {
+    "puntaje": 7041,
+    "nombre": "Felipe"
+  },
+  {
     "puntaje": 2059,
     "nombre": "Felipe"
   },
@@ -13,10 +17,6 @@
   },
   {
     "puntaje": 259,
-    "nombre": "Felipe"
-  },
-  {
-    "puntaje": 186,
     "nombre": "Felipe"
   }
 ]}
