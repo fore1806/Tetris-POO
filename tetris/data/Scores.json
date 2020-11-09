@@ -12,6 +12,10 @@
     "nombre": "---"
   },
   {
+    "puntaje": 5206,
+    "nombre": "---"
+  },
+  {
     "puntaje": 2637,
     "nombre": "Felipe"
   },
@@ -26,9 +30,5 @@
   {
     "puntaje": 1070,
     "nombre": "Newton"
-  },
-  {
-    "puntaje": 1033,
-    "nombre": "Uribe"
   }
 ]}

@@ -48,7 +48,7 @@ void setUpGame() {
   nextTablero = new Tablero(225, 0, 9, 9, tablero, 5, 0);
   nextTablero.inicialize(1);
   polyominoMove = new Polyomino(polyominoColor[numT], 0, arrayPolyominos[numT], -1, nMinos, tablero);
-  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 3, nNextMinos, nextTablero);
   posFinalPol();
   puntaje = 0;
   nivel = 1;
@@ -63,7 +63,7 @@ void continueGame() {
   numNextT = int(random (numMin, numMax));
   nNextMinos = numMino(numNextT);
   varNewPol();
-  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 2, nNextMinos, nextTablero);
+  nextPolyomino = new Polyomino(polyominoColor[numNextT], 0, arrayPolyominos[numNextT], 3, nNextMinos, nextTablero);
   posFinalPol();
 }
 
@@ -121,11 +121,18 @@ void saveData(String nombre, int puntaje) {
 
 //Funcion para subir de nivel
 void nivel() {
-  if ((millis()>= (tiempoJuego +20000)) && (nivel <15)) { //Cada 10 segundos el nivel aumenta
+  if ((millis()>= (tiempoJuego +20000)) && (nivel <15)) { //Cada 20 segundos el nivel aumenta
     tiempoJuego = millis();
     nivel += 1;
     intervalo -= 30;  //Caeran mas rapidamente las piezas
-    L += 0.005;  //Se aumenta tambien la velocidad de reproduccion de la cancion principal
+  }
+}
+//Funcion para volver a poner la canción
+void reSound() {
+  if ((millis()>= (soundTime+timeReSound))) { //Cada 10 segundos el nivel aumenta
+    timeReSound = millis();
+    principalS.play();
+    principalS.amp(0.3);
   }
 }
 
@@ -159,7 +166,7 @@ void keyPressed() {
       polyominoMove.rotatePolyomino();
     } else if ((key == 'w' || key == 'W'|| key == 'i' || key == 'I') && (!polyominoMove.colisionDownRotate(1))) {
       polyominoMove.reflectPolyomino();
-    }else if (key == 'p' || key == 'P') {
+    } else if (key == 'p' || key == 'P') {
       screenPause = !screenPause;
       screenGame = !screenGame;
     }
@@ -169,7 +176,7 @@ void keyPressed() {
       screenGameOver = !screenGameOver;
     }
   } else if (screenPause) {
-    if (key == 'P' || key == 'P') {
+    if (key == 'p' || key == 'P') {
       screenPause = !screenPause;
       screenGame = !screenGame;
     }

@@ -18,8 +18,9 @@ boolean newScore = true;
 //Objetos de sonido y variables para controlar la velocidad de los mismos
 SoundFile principalS;
 SoundFile deleteS;
-float L = 0.75;  //tiempo del sonido
-float L2 = 0.9;  //tiempo del sonido de eliminar
+float L2 = 0.9;  //rate del sonido de eliminar
+float soundTime;
+float timeReSound = 0;
 //Objetos de imagen y Fuente
 PImage tetrisImagen;// Imagen de inicio
 PImage gameOverImagen;//Imagen del game Over
@@ -134,6 +135,8 @@ int intervalo = 700;
 int tiempoJuego;
 
 int numVolver; //Variable auxiliar para saber si se debe ir a la pantalla de inicio o a la de pause cuando estemos en la de como jugar
+float posTX;
+float posTY;
 
 
 
@@ -143,8 +146,8 @@ void setup() {
   deleteS = new SoundFile(this, "eliminacion.mp3"); //Inicializamos el objeto que suena cuando se elimina una fila
   principalS.play();
   principalS.amp(0.3); //Se hace sonar mas bajo
-  principalS.rate(L);  //Se configura la velocidad de reproduccion del sonido
   deleteS.rate(L2);  //Se configura la velocidad de reproduccion del sonido
+  soundTime = principalS.duration()*1000;
   tetrisImagen = loadImage("tetris.png");  //Inicializamos el objeto para la imagen de inicio
   gameOverImagen = loadImage("game_over.png");  //Inicializamos el objeto para la imagen de game over
   llenarRandomColors();  //Asignamos los colores al selector
@@ -165,6 +168,8 @@ void setup() {
 
 void draw() {
   background(0);
+  
+  reSound();  //Volver a poner la cancion
 
   if (changeFacts) {  //Se debe setear nuevamente el juego con las configuraciones especificadas
     setUpGame();

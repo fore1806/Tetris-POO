@@ -16,7 +16,7 @@ void nameScreen() {
   gaboB  = new Button(width/2 + 400, height/2+190, 400, 60, 125, 0, "Gabo", fuente);
   continueButton = new Button(width/2, height/2+300, 550, 100, 125, 0, "CONTINUAR", fuente);
   buttonArray();
-  mostrador(0,6);
+  mostrador(0, 6);
 }
 
 void inicialScreen() {
@@ -26,7 +26,7 @@ void inicialScreen() {
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
   howButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
   buttonArray();
-  mostrador(7,9);
+  mostrador(7, 9);
 }
 
 void howScreen() {
@@ -51,7 +51,7 @@ void howScreen() {
   playButton = new Button(width/2+350, height/2+330, 350, 100, 125, 0, "JUGAR", fuente);
   backButton = new Button(width/2-350, height/2+330, 350, 100, 125, 0, "VOLVER", fuente);
   buttonArray();
-  mostrador(9,10);
+  mostrador(9, 10);
 }
 
 void confTScreen() {
@@ -69,8 +69,8 @@ void confTScreen() {
   backButton = new Button(width/2-350, height/2+330, 410, 100, 125, 0, "VOLVER", fuente);
   configurarButton = new Button(width/2+350, height/2+330, 410, 100, 125, 0, "CONFIGURAR", fuente);
   buttonArray();
-  mostrador(8,8);
-  mostrador(10,13);
+  mostrador(8, 8);
+  mostrador(10, 13);
 }
 
 void confPScreen() {
@@ -97,15 +97,23 @@ void confPScreen() {
   continueButton = new Button(width/2+350, height/2+330, 450, 100, 125, 0, "CONTINUAR", fuente);
   backButton = new Button(width/2-350, height/2+330, 450, 100, 125, 0, "VOLVER", fuente);
   buttonArray();
-  mostrador(6,6);
-  mostrador(10,10);
-  mostrador(14,19);
+  mostrador(6, 6);
+  mostrador(10, 10);
+  mostrador(14, 19);
 }
 
 void coloresScreen() {
   showColor();
   showPolyominos();
   colorSeleccionado(1);
+  push();
+  textFont(fuente);
+  textAlign(CENTER, CENTER);
+  fill(240);
+  textSize(50);
+  text("Usa N para", posTX, posTY);
+  text("continuar", posTX, posTY+60);
+  pop();
 }
 
 void gameScreen() {
@@ -124,15 +132,15 @@ void gameScreen() {
   tiempo();
 }
 
-void pauseScreen(){
+void pauseScreen() {
   numVolver = 1;
   continueButton = new Button(width/2, height/2-300, 800, 100, 125, 0, "CONTINUAR", fuente);
   restartButton = new Button(width/2, height/2-100, 800, 100, 125, 0, "VOLVER A EMPEZAR", fuente);
   howButton = new Button(width/2, height/2+100, 800, 100, 125, 0, "¿CÓMO JUGAR?", fuente);
   inicioButton = new Button(width/2, height/2+300, 800, 100, 125, 0, "INICIO", fuente);
   buttonArray();
-  mostrador(6,7);
-  mostrador(20,21);
+  mostrador(6, 7);
+  mostrador(20, 21);
 }
 
 void scoreScreen() {
@@ -147,7 +155,9 @@ void scoreScreen() {
   text(puntaje, width/2, 150);
   text("Jugador", width/2-300, 240);
   text("Puntaje", width/2+300, 240);
-//Mostrar los mejores puntajes
+  textSize(50);
+  text("Usa N para continuar", width/2, height-50);
+  //Mostrar los mejores puntajes
   JSONArray topScore = loadData();
   for (int i = 0; i < topScore.size(); i++) {
     JSONObject persona = topScore.getJSONObject(i);
@@ -165,8 +175,8 @@ void gameOverScreen() {
   configurarButton = new Button(width/2, height/2+170, 800, 100, 125, 0, "CONFIGURAR", fuente);
   inicioButton = new Button(width/2, height/2+320, 800, 100, 125, 0, "INICIO", fuente);
   buttonArray();
-  mostrador(8,8);
-  mostrador(20,21);
+  mostrador(8, 8);
+  mostrador(20, 21);
 }
 
 //Funcion para postrar los datos de nivel y puntaje
@@ -290,12 +300,18 @@ void sizeColor() {
   switch(nMinos) {
   case 5: 
     dimCColor = 20;
+    posTX = width/2 -15;
+    posTY = height/2;
     break;
   case 4: 
     dimCColor = 25;
+    posTX = width/2 +400;
+    posTY = height/2;
     break;
   default:
     dimCColor = 40;
+    posTX = width/2;
+    posTY = height/2 + 250;
   }
 }
 
@@ -326,8 +342,8 @@ void buttonArray() {
 }
 
 //Metodo para mostrar botones, convierte mas de 2 lineas de codigo en 2
-void mostrador(int num1,int num2){
-  for (int i = num1;i<=num2;i++){
+void mostrador(int num1, int num2) {
+  for (int i = num1; i<=num2; i++) {
     arrayButton[i].seleccionador();
     arrayButton[i].display();
   }
@@ -336,10 +352,16 @@ void mostrador(int num1,int num2){
 //Funcion para dibujar el boton de pausa
 void pauseBotton() {
   push();
+  float d = dist(mouseX, mouseY, pauseBottonX, pauseBottonY);
+  if (d<radioPauseButton) {
+    strokeWeight(7);
+    stroke(#3BE0F2);
+  } else stroke(0);
   ellipseMode(RADIUS);
   fill(tablero.fillColor);
   circle(pauseBottonX, pauseBottonY, radioPauseButton);
   fill(polyominoMove.strokeColor);
+  noStroke();
   rect(pauseBottonX-30, pauseBottonY-30, 20, 60);
   rect(pauseBottonX+10, pauseBottonY-30, 20, 60);
   pop();
