@@ -119,7 +119,7 @@ En esta pantalla se presentan los mejores puntajes obtenidos en el juego. Para s
 
 ### Pantalla de Game Over
 
-![](images/pantallaGameOver.JPG)
+![](images/pantallaGO.JPG)
 
 Esta pantalla solo se muestra una vez has perdido, en ella se observa tu puedes decidir que quieres hacer ahora.
 
